@@ -13,6 +13,7 @@ import { addContacts } from '@/db/repository';
 import type { LastContactAnswer } from '@/domain/initial-estimate';
 import { DEFAULT_FREQUENCY, FREQUENCIES, useAddFlow, type ContactSetup } from '@/hooks/add-flow';
 import { defaultChannel } from '@/services/messaging';
+import { getNotificationPermission, requestNotificationPermission } from '@/services/notifications';
 import { replan } from '@/services/planning';
 import { Type } from '@/theme/typography';
 import { useColors } from '@/theme/use-colors';
@@ -63,6 +64,9 @@ export default function ContactSetupScreen() {
         now,
       );
       await replan(db, now);
+      // Premier ajout : les rappels passent par les notifications (US-03). L'écran d'explication
+      // du premier lancement les demandera avant ; ici, on rattrape le cas où il a été passé.
+      if ((await getNotificationPermission()) === 'undetermined') await requestNotificationPermission();
       flow.setSelected([]);
       router.dismissTo('/');
     } catch (error) {

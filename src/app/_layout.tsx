@@ -1,4 +1,5 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import * as Notifications from 'expo-notifications';
+import { DarkTheme, DefaultTheme, router, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,16 +8,24 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { getDatabase } from '@/db/database';
 import { getSettings } from '@/db/repository';
-import { applyLanguage } from '@/i18n';
+import i18n, { applyLanguage } from '@/i18n';
+import { reminderData } from '@/services/notification-responses';
+import { setupNotificationCategories } from '@/services/notifications';
 import { replan } from '@/services/planning';
 
 void SplashScreen.preventAutoHideAsync();
 
-/** Ouverture de la base, langue de l'utilisateur, puis replanification des rappels (architecture.pdf). */
+/**
+ * Ouverture de la base, langue de l'utilisateur, boutons des notifications dans cette langue,
+ * puis replanification des rappels (architecture.pdf, « Fonctionnement des rappels »).
+ */
 async function startApp(): Promise<void> {
   try {
     const db = await getDatabase();
     await applyLanguage((await getSettings(db)).language);
+    await setupNotificationCategories(i18n.t.bind(i18n)).catch((error: unknown) =>
+      console.error('Démarrage : catégories de notification', error),
+    );
     await replan(db);
   } catch (error) {
     console.error('Démarrage : erreur', error);
@@ -46,8 +55,28 @@ export default function RootLayout() {
   );
 }
 
+/**
+ * Toucher la notification elle-même (et non un bouton) : la fiche du contact (US-13),
+ * ou le bilan pour la notification hebdomadaire.
+ */
+function useNotificationNavigation() {
+  const response = Notifications.useLastNotificationResponse();
+  useEffect(() => {
+    if (!response || response.actionIdentifier !== Notifications.DEFAULT_ACTION_IDENTIFIER) return;
+    const data = reminderData(response);
+    if (data?.kind === 'reminder' && data.contactId) {
+      router.push({ pathname: '/contact/[id]', params: { id: data.contactId } });
+    } else if (data?.kind === 'weekly_review') {
+      router.push('/review');
+    }
+    // Sinon la réponse reviendrait au prochain démarrage.
+    void Notifications.clearLastNotificationResponseAsync();
+  }, [response]);
+}
+
 function AppStack() {
   const { t } = useTranslation();
+  useNotificationNavigation();
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />

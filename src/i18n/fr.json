@@ -43,10 +43,17 @@
     "reviewButton_other": "Bilan de la semaine, {{count}} proches à passer en revue"
   },
   "reminder": {
-    "body": "Pensez à prendre des nouvelles de {{name}}.",
     "write": "Écrire sur {{channel}}",
     "done": "C'est déjà fait",
-    "later": "Plus tard"
+    "later": "Plus tard",
+    "reminderBody": "Pensez à prendre de ses nouvelles 💛\nDernier échange noté : {{ago}}.",
+    "call": "Appeler",
+    "channelName": "Rappels",
+    "reviewTitle": "Bilan de la semaine",
+    "reviewBody_one": "{{count}} proche à passer en revue. Ça prend 30 secondes ✨",
+    "reviewBody_other": "{{count}} proches à passer en revue. Ça prend 30 secondes ✨",
+    "reopenTitle": "Remember",
+    "reopenBody": "Faites le point sur vos proches 💛"
   },
   "review": {
     "title": "Bilan de la semaine",
@@ -126,7 +133,11 @@
       "today": "aujourd'hui",
       "yesterday": "hier",
       "days_one": "il y a {{count}} jour",
-      "days_other": "il y a {{count}} jours"
+      "days_other": "il y a {{count}} jours",
+      "weeks_one": "il y a {{count}} semaine",
+      "weeks_other": "il y a {{count}} semaines",
+      "months_one": "il y a {{count}} mois",
+      "months_other": "il y a {{count}} mois"
     },
     "frequency": "Fréquence",
     "channel": "Messagerie",

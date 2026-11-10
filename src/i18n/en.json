@@ -43,10 +43,17 @@
     "reviewButton_other": "Weekly check-in, {{count}} people to review"
   },
   "reminder": {
-    "body": "Time to check in with {{name}}.",
     "write": "Message on {{channel}}",
     "done": "Already done",
-    "later": "Later"
+    "later": "Later",
+    "reminderBody": "Time to check in 💛\nLast contact noted: {{ago}}.",
+    "call": "Call",
+    "channelName": "Reminders",
+    "reviewTitle": "Weekly check-in",
+    "reviewBody_one": "{{count}} person to review. It takes 30 seconds ✨",
+    "reviewBody_other": "{{count}} people to review. It takes 30 seconds ✨",
+    "reopenTitle": "Remember",
+    "reopenBody": "Check in on your people 💛"
   },
   "review": {
     "title": "Weekly check-in",
@@ -126,7 +133,11 @@
       "today": "today",
       "yesterday": "yesterday",
       "days_one": "{{count}} day ago",
-      "days_other": "{{count}} days ago"
+      "days_other": "{{count}} days ago",
+      "weeks_one": "{{count}} week ago",
+      "weeks_other": "{{count}} weeks ago",
+      "months_one": "{{count}} month ago",
+      "months_other": "{{count}} months ago"
     },
     "frequency": "Frequency",
     "channel": "Messaging app",
