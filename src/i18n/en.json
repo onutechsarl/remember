@@ -6,7 +6,10 @@
     "settings": "Settings",
     "add": "Add",
     "loadError": "Couldn't load your data.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "save": "Save",
+    "error": "Something went wrong. Please try again."
   },
   "frequency": {
     "7": "Every week",
@@ -107,6 +110,70 @@
       "finish": "Done",
       "skip": "Skip this step",
       "saveError": "Couldn't save. Please try again."
+    },
+    "indexLetter": "Jump to letter {{letter}}"
+  },
+  "contact": {
+    "back": "Back",
+    "edit": "Edit",
+    "call": "Call",
+    "done": "Done",
+    "notFound": "This contact no longer exists.",
+    "invalidPhone": "No valid number: tap Edit to add one, with the country code.",
+    "late": "Overdue · last contact {{ago}}",
+    "ok": "Up to date · last contact {{ago}}",
+    "ago": {
+      "today": "today",
+      "yesterday": "yesterday",
+      "days_one": "{{count}} day ago",
+      "days_other": "{{count}} days ago"
+    },
+    "frequency": "Frequency",
+    "channel": "Messaging app",
+    "lastContact": "Last contact",
+    "correct": "Fix",
+    "nextReminder": "Next reminder",
+    "noReminder": "None planned",
+    "paused": "Paused",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "channelFallback": "{{channel}} is no longer installed: SMS is used instead.",
+    "history": "History",
+    "source": {
+      "initial_estimate": "Estimate when added",
+      "notification_done": "Already done",
+      "app_action": "Noted in the app",
+      "weekly_review": "Weekly check-in",
+      "manual_edit": "Date corrected",
+      "android_call_log": "Call detected",
+      "android_notification": "Message detected",
+      "notification_message": "Reminder"
+    },
+    "wroteOn": "Messaged on {{channel}}",
+    "called": "Phone call",
+    "stop": "Stop following {{name}}",
+    "stopConfirm": {
+      "title": "Stop following {{name}}?",
+      "body": "You won't get reminders for this person anymore. Their history is kept.",
+      "confirm": "Stop following"
+    },
+    "sheet": {
+      "frequency": "How often?",
+      "channel": "Preferred app",
+      "channelHint": "The reminder will open this app directly.",
+      "notInstalled": "Not installed",
+      "alwaysAvailable": "SMS and calls are always available.",
+      "lastContact": "Last contact",
+      "lastContactHint": "When did you last talk?"
+    },
+    "editor": {
+      "title": "Edit contact",
+      "name": "Name",
+      "phone": "Number",
+      "phoneHint": "Include the country code for a foreign number, for example +237.",
+      "nameRequired": "A name is required.",
+      "invalidPhone": "This number isn't valid. Add the country code, for example +237.",
+      "duplicate": "This number is already used by another contact."
     }
   }
 }

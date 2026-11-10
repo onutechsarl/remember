@@ -6,7 +6,10 @@
     "settings": "Réglages",
     "add": "Ajouter",
     "loadError": "Impossible de charger vos données.",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "error": "Une erreur est survenue. Réessayez."
   },
   "frequency": {
     "7": "Chaque semaine",
@@ -107,6 +110,70 @@
       "finish": "Terminer",
       "skip": "Passer cette étape",
       "saveError": "L'ajout n'a pas pu être enregistré. Réessayez."
+    },
+    "indexLetter": "Aller à la lettre {{letter}}"
+  },
+  "contact": {
+    "back": "Retour",
+    "edit": "Modifier",
+    "call": "Appeler",
+    "done": "C'est fait",
+    "notFound": "Ce contact n'existe plus.",
+    "invalidPhone": "Pas de numéro valide : touchez Modifier pour en ajouter un, avec l'indicatif du pays.",
+    "late": "En retard · dernier échange {{ago}}",
+    "ok": "À jour · dernier échange {{ago}}",
+    "ago": {
+      "today": "aujourd'hui",
+      "yesterday": "hier",
+      "days_one": "il y a {{count}} jour",
+      "days_other": "il y a {{count}} jours"
+    },
+    "frequency": "Fréquence",
+    "channel": "Messagerie",
+    "lastContact": "Dernier échange",
+    "correct": "Corriger",
+    "nextReminder": "Prochain rappel",
+    "noReminder": "Aucun prévu",
+    "paused": "En pause",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "channelFallback": "{{channel}} n'est plus installée : le SMS est utilisé à la place.",
+    "history": "Historique",
+    "source": {
+      "initial_estimate": "Estimation à l'ajout",
+      "notification_done": "C'est déjà fait",
+      "app_action": "Noté dans l'application",
+      "weekly_review": "Bilan hebdomadaire",
+      "manual_edit": "Date corrigée",
+      "android_call_log": "Appel détecté",
+      "android_notification": "Message détecté",
+      "notification_message": "Rappel"
+    },
+    "wroteOn": "Écrit sur {{channel}}",
+    "called": "Appel téléphonique",
+    "stop": "Arrêter de suivre {{name}}",
+    "stopConfirm": {
+      "title": "Arrêter de suivre {{name}} ?",
+      "body": "Vous ne recevrez plus de rappels pour cette personne. Son historique est conservé.",
+      "confirm": "Arrêter de suivre"
+    },
+    "sheet": {
+      "frequency": "Tous les combien ?",
+      "channel": "Messagerie préférée",
+      "channelHint": "Le rappel ouvrira directement cette application.",
+      "notInstalled": "Non installée",
+      "alwaysAvailable": "Le SMS et l'appel sont toujours disponibles.",
+      "lastContact": "Dernier échange",
+      "lastContactHint": "Quand vous êtes-vous parlé pour la dernière fois ?"
+    },
+    "editor": {
+      "title": "Modifier le contact",
+      "name": "Nom",
+      "phone": "Numéro",
+      "phoneHint": "Avec l'indicatif du pays pour un numéro étranger, par exemple +237.",
+      "nameRequired": "Le nom est obligatoire.",
+      "invalidPhone": "Ce numéro n'est pas valide. Ajoutez l'indicatif du pays, par exemple +237.",
+      "duplicate": "Ce numéro est déjà suivi pour un autre contact."
     }
   }
 }

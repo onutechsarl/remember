@@ -53,12 +53,24 @@ function AppStack() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="onboarding" options={{ headerShown: false }} />
       <Stack.Screen name="add" options={{ headerShown: false }} />
-      <Stack.Screen name="contact/[id]" options={{ title: '' }} />
+      <Stack.Screen name="contact/[id]/index" options={{ title: '', headerBackTitle: t('contact.back') }} />
+      <Stack.Screen name="contact/[id]/frequency" options={SHEET} />
+      <Stack.Screen name="contact/[id]/channel" options={SHEET} />
+      <Stack.Screen name="contact/[id]/last-contact" options={SHEET} />
+      <Stack.Screen name="contact/[id]/edit" options={{ presentation: 'modal' }} />
       <Stack.Screen name="review" options={{ presentation: 'fullScreenModal', headerShown: false }} />
       <Stack.Screen name="settings" options={{ title: t('common.settings') }} />
     </Stack>
   );
 }
+
+/** Panneau qui monte du bas, à la hauteur de son contenu. */
+const SHEET = {
+  presentation: 'formSheet',
+  sheetAllowedDetents: 'fitToContents',
+  sheetGrabberVisible: true,
+  headerShown: false,
+} as const;
 
 const styles = StyleSheet.create({
   root: { flex: 1 },

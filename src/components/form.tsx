@@ -1,4 +1,4 @@
-import { Check, Search } from 'lucide-react-native';
+import { Check, Search, type LucideIcon } from 'lucide-react-native';
 import type { ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
 
@@ -158,6 +158,8 @@ const styles = StyleSheet.create({
   radio: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   radioDot: { width: 11, height: 11, borderRadius: 6 },
   tag: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
+  badge: { width: 32, height: 32, borderRadius: Platform.OS === 'ios' ? 8 : 16, alignItems: 'center', justifyContent: 'center' },
+  rowValue: { flexShrink: 1, textAlign: 'right' },
   card: {
     flex: 1,
     flexDirection: 'row',
@@ -178,3 +180,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
+
+/** Icône blanche dans un petit carré coloré (iOS) ou un cercle (Android), en tête de ligne. */
+export function IconBadge({ icon: Icon, color }: { icon: LucideIcon; color: string }) {
+  return (
+    <View style={[styles.badge, { backgroundColor: color }]}>
+      <Icon color="#FFFFFF" size={19} strokeWidth={2.2} />
+    </View>
+  );
+}
+
+/** Valeur grise à droite d'une ligne (« Toutes les 2 semaines », « Aujourd'hui, 18:00 »). */
+export function RowValue({ children }: { children: string }) {
+  const colors = useColors();
+  return (
+    <Text style={[Type.body, styles.rowValue, { color: colors.textSecondary }]} numberOfLines={1}>
+      {children}
+    </Text>
+  );
+}

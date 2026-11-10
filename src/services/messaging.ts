@@ -36,3 +36,37 @@ export async function availableChannels(): Promise<Channel[]> {
 export function defaultChannel(available: readonly Channel[]): Channel {
   return available.includes(DEFAULT_CHANNEL) ? DEFAULT_CHANNEL : 'sms';
 }
+
+/**
+ * Lien qui ouvre la conversation avec le contact (architecture.pdf, tableau des messageries).
+ * @param e164 numéro au format E.164, avec le signe plus.
+ */
+export function conversationUrl(channel: Channel, e164: string): string {
+  const digits = e164.replace(/^\+/, '');
+  switch (channel) {
+    case 'whatsapp':
+      return `https://wa.me/${digits}`;
+    case 'telegram':
+      return `https://t.me/+${digits}`;
+    case 'signal':
+      return `https://signal.me/#p/+${digits}`;
+    case 'viber':
+      return `viber://chat?number=${encodeURIComponent(`+${digits}`)}`;
+    case 'sms':
+      return `sms:+${digits}`;
+    case 'call':
+      return `tel:+${digits}`;
+  }
+}
+
+/** Messagerie réellement utilisée : le SMS si la messagerie préférée a été désinstallée (US-17 CA5). */
+export function effectiveChannel(preferred: Channel, available: readonly Channel[]): Channel {
+  return available.includes(preferred) ? preferred : 'sms';
+}
+
+/** Ouvre la conversation dans la messagerie (ou l'appel). Renvoie la messagerie utilisée. */
+export async function openConversation(preferred: Channel, e164: string, available: readonly Channel[]): Promise<Channel> {
+  const channel = effectiveChannel(preferred, available);
+  await Linking.openURL(conversationUrl(channel, e164));
+  return channel;
+}

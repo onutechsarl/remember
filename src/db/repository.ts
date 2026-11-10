@@ -316,3 +316,12 @@ export async function listFiredReminderDates(db: Db, since: Date, now: Date): Pr
   );
   return rows.map((r) => new Date(r.fire_at));
 }
+
+/** Prochain rappel programmé pour un contact (US-07 CA1), ou `null`. */
+export async function nextReminderFor(db: Db, contactId: string, now: Date): Promise<Date | null> {
+  const row = await db.getFirstAsync<{ fire_at: string }>(
+    "SELECT fire_at FROM scheduled_reminder WHERE contact_id = ? AND kind = 'reminder' AND fire_at > ? ORDER BY fire_at LIMIT 1",
+    [contactId, toIso(now)],
+  );
+  return row ? new Date(row.fire_at) : null;
+}

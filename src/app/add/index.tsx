@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Info, Users } from 'lucide-react-native';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AlphabetIndex } from '@/components/alphabet-index';
 import { Avatar } from '@/components/avatar';
 import { PrimaryButton } from '@/components/buttons';
 import { SearchField, SelectionMark, Tag } from '@/components/form';
@@ -34,6 +35,14 @@ import { useColors } from '@/theme/use-colors';
 import { formatPhone } from '@/utils/phone';
 
 type Directory = { contacts: DeviceContact[]; tracked: Set<string> };
+type Section = { title: string; data: DeviceContact[] };
+
+/**
+ * Hauteurs fixes des titres de section et des lignes : elles permettent de calculer la position
+ * de chaque section pour l'index alphabétique, même pour les sections pas encore affichées.
+ */
+const SECTION_HEADER_HEIGHT = 32;
+const ROW_HEIGHT = 64;
 
 /** Clé de recherche et de tri : minuscules, sans accents. */
 const normalize = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
@@ -67,6 +76,8 @@ export default function SelectContactsScreen() {
   const [access, setAccess] = useState<ContactsAccess | 'loading'>('loading');
   const [directory, setDirectory] = useState<Directory>({ contacts: [], tracked: new Set() });
   const [query, setQuery] = useState('');
+  const list = useRef<SectionList<DeviceContact, Section>>(null);
+  const listHeaderHeight = useRef(0);
 
   const load = useCallback(
     () =>
@@ -104,6 +115,15 @@ export default function SelectContactsScreen() {
       .sort(([a], [b]) => (a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b)))
       .map(([title, data]) => ({ title, data }));
   }, [directory.contacts, query]);
+
+  /** Fait défiler la liste jusqu'au titre de la section (index alphabétique). */
+  const jumpTo = (sectionIndex: number) => {
+    if (sectionIndex < 0) return;
+    const y = sections
+      .slice(0, sectionIndex)
+      .reduce((offset, s) => offset + SECTION_HEADER_HEIGHT + s.data.length * ROW_HEIGHT, listHeaderHeight.current);
+    list.current?.getScrollResponder()?.scrollTo({ y, animated: false });
+  };
 
   const selectedIds = new Set(selected.map((c) => c.deviceContactId));
   const toggle = (contact: DeviceContact) =>
@@ -144,50 +164,60 @@ export default function SelectContactsScreen() {
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
-      <SectionList
-        sections={sections}
-        keyExtractor={(c) => c.deviceContactId}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        stickySectionHeadersEnabled
-        ListHeaderComponent={
-          <View style={styles.listHeader}>
-            <SearchField value={query} onChangeText={setQuery} placeholder={t('add.search')} />
-            {access === 'limited' && (
-              <View style={styles.limited}>
-                <Info color={colors.textSecondary} size={18} />
-                <Text style={[Type.secondary, styles.limitedText, { color: colors.textSecondary }]}>
-                  {t('add.limited', { count: directory.contacts.length })}{' '}
-                  <Text
-                    style={{ color: colors.accentText, fontWeight: '600' }}
-                    onPress={() => void grantMoreContacts().then(() => load())}
-                    accessibilityRole="button">
-                    {t('add.manage')}
+      <View style={styles.screen}>
+        <SectionList
+          ref={list}
+          sections={sections}
+          keyExtractor={(c) => c.deviceContactId}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          stickySectionHeadersEnabled
+          ListHeaderComponent={
+            <View style={styles.listHeader} onLayout={(e) => (listHeaderHeight.current = e.nativeEvent.layout.height)}>
+              <SearchField value={query} onChangeText={setQuery} placeholder={t('add.search')} />
+              {access === 'limited' && (
+                <View style={styles.limited}>
+                  <Info color={colors.textSecondary} size={18} />
+                  <Text style={[Type.secondary, styles.limitedText, { color: colors.textSecondary }]}>
+                    {t('add.limited', { count: directory.contacts.length })}{' '}
+                    <Text
+                      style={{ color: colors.accentText, fontWeight: '600' }}
+                      onPress={() => void grantMoreContacts().then(() => load())}
+                      accessibilityRole="button">
+                      {t('add.manage')}
+                    </Text>
                   </Text>
-                </Text>
-              </View>
-            )}
-          </View>
-        }
-        ListEmptyComponent={
-          <Text style={[Type.body, styles.emptyText, { color: colors.textSecondary }]}>
-            {query ? t('add.noResults', { query }) : t('add.emptyDirectory')}
-          </Text>
-        }
-        renderSectionHeader={({ section }) => (
-          <Text style={[Type.caption, styles.letter, { color: colors.textSecondary, backgroundColor: colors.background }]}>
-            {section.title}
-          </Text>
-        )}
-        renderItem={({ item }) => (
-          <DirectoryRow
-            contact={item}
-            tracked={directory.tracked.has(item.deviceContactId)}
-            checked={selectedIds.has(item.deviceContactId)}
-            onPress={() => toggle(item)}
+                </View>
+              )}
+            </View>
+          }
+          ListEmptyComponent={
+            <Text style={[Type.body, styles.emptyText, { color: colors.textSecondary }]}>
+              {query ? t('add.noResults', { query }) : t('add.emptyDirectory')}
+            </Text>
+          }
+          renderSectionHeader={({ section }) => (
+            <Text style={[Type.caption, styles.letter, { color: colors.textSecondary, backgroundColor: colors.background }]}>
+              {section.title}
+            </Text>
+          )}
+          renderItem={({ item }) => (
+            <DirectoryRow
+              contact={item}
+              tracked={directory.tracked.has(item.deviceContactId)}
+              checked={selectedIds.has(item.deviceContactId)}
+              onPress={() => toggle(item)}
+            />
+          )}
+        />
+        {!query && sections.length > 1 && (
+          <AlphabetIndex
+            sections={sections.map((s) => s.title)}
+            onSelect={jumpTo}
+            letterLabel={(letter) => t('add.indexLetter', { letter })}
           />
         )}
-      />
+      </View>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12, borderTopColor: colors.separator }]}>
         {selected.length > 0 && (
@@ -244,10 +274,10 @@ function DirectoryRow({
       <View style={[styles.rowBody, tracked && styles.dimmed]}>
         <Avatar id={contact.deviceContactId} name={contact.name} size={48} />
         <View style={styles.rowTexts}>
-          <Text style={[Type.body, { color: colors.text }]} numberOfLines={1}>
+          <Text style={[Type.body, { color: colors.text }]} numberOfLines={1} maxFontSizeMultiplier={1.3}>
             {contact.name}
           </Text>
-          <Text style={[Type.secondary, { color: colors.textSecondary }]} numberOfLines={1}>
+          <Text style={[Type.secondary, { color: colors.textSecondary }]} numberOfLines={1} maxFontSizeMultiplier={1.3}>
             {phone}
           </Text>
         </View>
@@ -262,12 +292,12 @@ const styles = StyleSheet.create({
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 14, padding: 32 },
   illustration: { width: 140, height: 140, borderRadius: 70, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   centerText: { textAlign: 'center' },
-  listHeader: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 4, gap: 10 },
+  listHeader: { paddingLeft: 20, paddingRight: 34, paddingTop: 4, paddingBottom: 4, gap: 10 },
   limited: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   limitedText: { flex: 1 },
   emptyText: { textAlign: 'center', padding: 32 },
-  letter: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 4 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 20, paddingVertical: 8 },
+  letter: { height: SECTION_HEADER_HEIGHT, paddingHorizontal: 20, paddingTop: 12 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 14, paddingLeft: 20, paddingRight: 34, height: ROW_HEIGHT },
   rowBody: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 14 },
   rowTexts: { flex: 1, gap: 2 },
   dimmed: { opacity: 0.45 },

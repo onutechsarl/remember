@@ -16,6 +16,7 @@ import {
   listActiveContacts,
   listFiredReminderDates,
   listInteractions,
+  nextReminderFor,
   recordInteraction,
   replaceFutureReminders,
   snoozeContactReminder,
@@ -188,6 +189,21 @@ describe('rappels programmés', () => {
     await replaceFutureReminders(db, [{ contactId: null, kind: 'weekly_review', fireAt: day(-70) }], day(-71));
     await replaceFutureReminders(db, [], NOW);
     expect(await db.getAllAsync('SELECT * FROM scheduled_reminder', [])).toEqual([]);
+  });
+
+  it('donne le prochain rappel d’un contact', async () => {
+    const [created] = await addContacts(db, [marie], NOW);
+    await replaceFutureReminders(
+      db,
+      [
+        { contactId: created.id, kind: 'reminder', fireAt: day(2, 18) },
+        { contactId: created.id, kind: 'reminder', fireAt: day(0, 18) },
+        { contactId: null, kind: 'weekly_review', fireAt: day(0, 12) },
+      ],
+      NOW,
+    );
+    expect(await nextReminderFor(db, created.id, NOW)).toEqual(day(0, 18));
+    expect(await nextReminderFor(db, created.id, day(3))).toBeNull();
   });
 
   it('ignore les rappels planifiés dans le passé', async () => {

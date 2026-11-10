@@ -13,6 +13,11 @@ const CHANNEL_STYLE: Record<Channel, { icon: LucideIcon; color: string }> = {
   call: { icon: Phone, color: '#34C759' },
 };
 
+/** Pictogramme seul d'une messagerie (bouton « Écrire » de la fiche). */
+export function channelGlyph(channel: Channel): LucideIcon {
+  return CHANNEL_STYLE[channel].icon;
+}
+
 /** Icône blanche dans un carré (iOS) ou un cercle (Android) à la couleur de la messagerie. */
 export function ChannelIcon({ channel, size = 36, round = false }: { channel: Channel; size?: number; round?: boolean }) {
   const { icon: Icon, color } = CHANNEL_STYLE[channel];

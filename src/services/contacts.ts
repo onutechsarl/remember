@@ -46,8 +46,10 @@ export function deviceCountry(): string | null {
 /** Contacts du répertoire avec un nom ou un numéro, triés par nom. */
 export async function readDeviceContacts(): Promise<DeviceContact[]> {
   const country = deviceCountry();
+  // Tri fait ci-dessous. Ne pas utiliser ContactsSortOrder.UserDefault : dans expo-contacts 58, sa valeur
+  // ('userDefault') est refusée par le module natif, qui attend 'useDefault'.
   const details = await Contact.getAllDetails([ContactField.FULL_NAME, ContactField.PHONES], {
-    sortOrder: ContactsSortOrder.UserDefault,
+    sortOrder: ContactsSortOrder.None,
   });
 
   return details
