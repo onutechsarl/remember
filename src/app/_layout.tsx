@@ -13,6 +13,7 @@ import i18n, { applyLanguage } from '@/i18n';
 import { reminderData } from '@/services/notification-responses';
 import { setupNotificationCategories } from '@/services/notifications';
 import { replan } from '@/services/planning';
+import { applyAppearance } from '@/theme/appearance';
 import { useColors } from '@/theme/use-colors';
 
 void SplashScreen.preventAutoHideAsync();
@@ -26,6 +27,7 @@ async function startApp(): Promise<boolean> {
   try {
     const db = await getDatabase();
     const settings = await getSettings(db);
+    applyAppearance(settings.appearance);
     await applyLanguage(settings.language);
     await setupNotificationCategories(i18n.t.bind(i18n)).catch((error: unknown) =>
       console.error('Démarrage : catégories de notification', error),
@@ -134,6 +136,7 @@ function AppStack({ onboarded }: { onboarded: boolean }) {
         <Stack.Screen name="settings/pause" options={SHEET} />
         <Stack.Screen name="settings/review" options={{ ...SHEET, sheetAllowedDetents: [0.9] }} />
         <Stack.Screen name="settings/language" options={SHEET} />
+        <Stack.Screen name="settings/appearance" options={SHEET} />
       </Stack.Protected>
     </Stack>
   );

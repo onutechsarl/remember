@@ -13,6 +13,7 @@ import {
   Pause,
   RotateCcw,
   Sparkles,
+  SunMoon,
   Upload,
   type LucideIcon,
 } from 'lucide-react-native';
@@ -35,7 +36,7 @@ import { useColors } from '@/theme/use-colors';
 import { formatShortDate, formatTime, formatWeekday } from '@/utils/format';
 import { timeToDate } from '@/utils/time';
 
-type Sheet = 'reminder-time' | 'max-per-day' | 'pause' | 'review' | 'language';
+type Sheet = 'reminder-time' | 'max-per-day' | 'pause' | 'review' | 'language' | 'appearance';
 
 /** Réglages (écran 6 ; US-15, US-16, US-18). */
 export default function SettingsScreen() {
@@ -64,6 +65,7 @@ export default function SettingsScreen() {
     pause: settings.pausedUntil ? { current: settings.pausedUntil.toISOString() } : {},
     review: { weekday: String(settings.weeklyReviewWeekday), time: settings.weeklyReviewTime },
     language: { current: settings.language },
+    appearance: { current: settings.appearance },
   };
   const open = (sheet: Sheet) => () => router.push({ pathname: `/settings/${sheet}`, params: params[sheet] });
   const chevron = ios ? <ChevronRight color={colors.chevron} size={18} strokeWidth={2.5} /> : undefined;
@@ -104,8 +106,8 @@ export default function SettingsScreen() {
           void (async () => {
             try {
               await importData(await getDatabase(), file);
-              // La langue importée s'applique aux écrans et aux boutons des notifications.
-              setSettings(await saveSettings({ language: file.settings.language }));
+              // La langue et l'apparence importées s'appliquent tout de suite.
+              setSettings(await saveSettings({ language: file.settings.language, appearance: file.settings.appearance }));
               Alert.alert(t('settings.importDone', { count }));
             } catch (error) {
               console.error('Import : erreur', error);
@@ -191,8 +193,14 @@ export default function SettingsScreen() {
         )}
       </Group>
 
-      <GroupHeader>{t('settings.language')}</GroupHeader>
+      <GroupHeader>{t('settings.display')}</GroupHeader>
       <Group>
+        <GroupRow
+          label={t('settings.appearance')}
+          leading={row(SunMoon)}
+          trailing={value(t(`settings.appearance_${settings.appearance}`))}
+          onPress={open('appearance')}
+        />
         <GroupRow
           label={t('settings.language')}
           leading={row(Globe)}

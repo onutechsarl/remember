@@ -249,7 +249,13 @@
     "openReview": "Open the check-in",
     "prepareReview": "Prepare a test check-in",
     "reviewPrepared": "All contacts are set to “10 days ago” and the check-in is available. Go back to Home.",
-    "restartOnboarding": "Replay the first launch"
+    "restartOnboarding": "Replay the first launch",
+    "display": "Display",
+    "appearance": "Appearance",
+    "appearance_system": "Automatic",
+    "appearance_light": "Light",
+    "appearance_dark": "Dark",
+    "appearanceHint": "“Automatic” follows your phone's light or dark mode."
   },
   "language": {
     "fr": "Français",

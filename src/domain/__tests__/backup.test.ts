@@ -19,6 +19,7 @@ describe('buildExport', () => {
     expect(file).toMatchObject({ app: 'remember', exportVersion: 1, exportedAt: NOW.toISOString() });
     expect(file.settings).toEqual({
       language: 'fr',
+      appearance: 'system',
       reminderTime: '18:00',
       maxRemindersPerDay: 2,
       snoozeDays: 2,

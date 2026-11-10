@@ -85,6 +85,7 @@ function checkSettings(raw: unknown, defaults: Settings): ExportedSettings {
     Number.isInteger(v) && (v as number) >= min && (v as number) <= max ? (v as number) : fallback;
   return {
     language: s.language === 'fr' || s.language === 'en' || s.language === 'system' ? s.language : defaults.language,
+    appearance: s.appearance === 'light' || s.appearance === 'dark' || s.appearance === 'system' ? s.appearance : defaults.appearance,
     reminderTime: isTime(s.reminderTime) ? s.reminderTime : defaults.reminderTime,
     maxRemindersPerDay: int(s.maxRemindersPerDay, 1, 5, defaults.maxRemindersPerDay),
     snoozeDays: int(s.snoozeDays, 1, 30, defaults.snoozeDays),

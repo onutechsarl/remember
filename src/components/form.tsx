@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   sheetText: { paddingHorizontal: 16 + ROW_INSET },
   group: { borderRadius: RADIUS.card, borderCurve: 'continuous', overflow: 'hidden' },
   sheetGroup: { marginHorizontal: 16 },
+  pickerCard: { borderRadius: RADIUS.card, borderCurve: 'continuous', alignItems: 'center', paddingVertical: 8, overflow: 'hidden' },
   flushGroup: { overflow: 'hidden' },
   row: { flexDirection: 'row', alignItems: 'center', paddingLeft: ROW_INSET, gap: 14, minHeight: ROW_HEIGHT },
   rowContent: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingRight: ROW_INSET, minHeight: ROW_HEIGHT },
@@ -227,6 +228,25 @@ export function IconBadge({ icon: Icon, size = 32 }: { icon: LucideIcon; size?: 
         { backgroundColor: colors.accentSoft },
       ]}>
       <Icon color={colors.accent} size={size * 0.58} strokeWidth={2} />
+    </View>
+  );
+}
+
+/**
+ * Carte blanche qui centre un sélecteur natif (roue des heures, calendrier), alignée sur les
+ * groupes de lignes : décalée de 16 des bords dans un panneau iOS.
+ */
+export function PickerCard({ children }: { children: ReactNode }) {
+  const colors = useColors();
+  const inSheet = useContext(InSheetContext);
+  return (
+    <View
+      style={[
+        styles.pickerCard,
+        inSheet && Platform.OS === 'ios' && styles.sheetGroup,
+        { backgroundColor: colors.surface },
+      ]}>
+      {children}
     </View>
   );
 }

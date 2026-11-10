@@ -249,7 +249,13 @@
     "openReview": "Ouvrir le bilan",
     "prepareReview": "Préparer un bilan de test",
     "reviewPrepared": "Tous les contacts sont à « il y a 10 jours » et le bilan est disponible. Revenez à l'accueil.",
-    "restartOnboarding": "Revoir le premier lancement"
+    "restartOnboarding": "Revoir le premier lancement",
+    "display": "Affichage",
+    "appearance": "Apparence",
+    "appearance_system": "Automatique",
+    "appearance_light": "Clair",
+    "appearance_dark": "Sombre",
+    "appearanceHint": "« Automatique » suit le mode clair ou sombre de votre téléphone."
   },
   "language": {
     "fr": "Français",

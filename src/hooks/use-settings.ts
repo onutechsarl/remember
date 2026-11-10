@@ -7,6 +7,7 @@ import type { Settings } from '@/domain/types';
 import i18n, { applyLanguage } from '@/i18n';
 import { setupNotificationCategories } from '@/services/notifications';
 import { replan } from '@/services/planning';
+import { applyAppearance } from '@/theme/appearance';
 
 /**
  * Enregistre des réglages puis replanifie les rappels (US-15). Un changement de langue s'applique
@@ -15,6 +16,7 @@ import { replan } from '@/services/planning';
 export async function saveSettings(patch: Partial<Settings>): Promise<Settings> {
   const db = await getDatabase();
   const settings = await updateSettings(db, patch);
+  if (patch.appearance !== undefined) applyAppearance(settings.appearance);
   if (patch.language !== undefined) {
     await applyLanguage(settings.language);
     await setupNotificationCategories(i18n.t.bind(i18n));

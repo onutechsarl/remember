@@ -4,7 +4,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
  * Schéma SQLite (data-model.pdf, « Dictionnaire de données »).
  * Dates stockées en texte ISO 8601, en UTC.
  */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 const CREATE_TABLES_V1 = `
 CREATE TABLE IF NOT EXISTS tracked_contact (
@@ -65,8 +65,11 @@ CREATE TABLE IF NOT EXISTS settings (
 INSERT OR IGNORE INTO settings (id) VALUES (1);
 `;
 
+/** Version 2 : apparence de l'app (`system`, `light` ou `dark`). */
+const ADD_APPEARANCE_V2 = `ALTER TABLE settings ADD COLUMN appearance TEXT NOT NULL DEFAULT 'system';`;
+
 /** MIGRATIONS[i] fait passer le schéma de la version i à la version i + 1. */
-const MIGRATIONS: string[] = [CREATE_TABLES_V1];
+export const MIGRATIONS: string[] = [CREATE_TABLES_V1, ADD_APPEARANCE_V2];
 
 type MigratableDb = Pick<SQLiteDatabase, 'execAsync' | 'getFirstAsync' | 'withTransactionAsync'>;
 

@@ -44,6 +44,8 @@ export type Interaction = {
 
 export type Settings = {
   language: 'system' | 'fr' | 'en';
+  /** Mode clair ou sombre ; `system` suit le téléphone. */
+  appearance: 'system' | 'light' | 'dark';
   reminderTime: string; // HH:MM, heure locale
   maxRemindersPerDay: number; // 1 à 5
   snoozeDays: number;
@@ -59,6 +61,7 @@ export type Settings = {
 
 export const DEFAULT_SETTINGS: Settings = {
   language: 'system',
+  appearance: 'system',
   reminderTime: '18:00',
   maxRemindersPerDay: 2,
   snoozeDays: 2,

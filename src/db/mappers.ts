@@ -37,6 +37,7 @@ export type InteractionRow = {
 
 export type SettingsRow = {
   language: string;
+  appearance: string;
   reminder_time: string;
   max_reminders_per_day: number;
   snooze_days: number;
@@ -125,6 +126,7 @@ export function interactionFromRow(row: InteractionRow): Interaction {
 export function settingsFromRow(row: SettingsRow): Settings {
   return {
     language: row.language as Settings['language'],
+    appearance: row.appearance as Settings['appearance'],
     reminderTime: row.reminder_time,
     maxRemindersPerDay: row.max_reminders_per_day,
     snoozeDays: row.snooze_days,
@@ -141,6 +143,7 @@ export function settingsFromRow(row: SettingsRow): Settings {
 /** Colonne SQL de chaque réglage, et conversion de sa valeur. */
 export const SETTINGS_COLUMNS: { [K in keyof Settings]: [column: string, toSql: (v: Settings[K]) => string | number | null] } = {
   language: ['language', (v) => v],
+  appearance: ['appearance', (v) => v],
   reminderTime: ['reminder_time', (v) => v],
   maxRemindersPerDay: ['max_reminders_per_day', (v) => v],
   snoozeDays: ['snooze_days', (v) => v],

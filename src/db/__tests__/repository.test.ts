@@ -29,7 +29,7 @@ import {
   type Db,
   type NewContact,
 } from '../repository';
-import { migrate, SCHEMA_VERSION } from '../schema';
+import { migrate, MIGRATIONS, SCHEMA_VERSION } from '../schema';
 
 jest.mock('expo-crypto', () => ({ randomUUID: () => jest.requireActual<typeof import('node:crypto')>('node:crypto').randomUUID() }));
 
@@ -57,6 +57,20 @@ describe('schéma', () => {
     await migrate(db);
     const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version', []);
     expect(row?.user_version).toBe(SCHEMA_VERSION);
+  });
+
+  it('migre une base en version 1 sans perdre ses données', async () => {
+    const old = await createTestDb();
+    // Base créée par une version précédente : seulement la migration 1.
+    const raw = (old as unknown as { raw: import('node:sqlite').DatabaseSync }).raw;
+    raw.exec('DROP TABLE scheduled_reminder; DROP TABLE interaction; DROP TABLE tracked_contact; DROP TABLE settings;');
+    raw.exec(MIGRATIONS[0]);
+    raw.exec("UPDATE settings SET max_reminders_per_day = 4; PRAGMA user_version = 1;");
+
+    await migrate(old);
+    expect(await getSettings(old)).toMatchObject({ maxRemindersPerDay: 4, appearance: 'system' });
+    const row = await old.getFirstAsync<{ user_version: number }>('PRAGMA user_version', []);
+    expect(row?.user_version).toBe(2);
   });
 
   it('active les clés étrangères', async () => {
