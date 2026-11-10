@@ -1,10 +1,12 @@
+import type { SQLiteDatabase } from 'expo-sqlite';
+
 /**
  * Schéma SQLite (data-model.pdf, « Dictionnaire de données »).
  * Dates stockées en texte ISO 8601, en UTC.
  */
 export const SCHEMA_VERSION = 1;
 
-export const CREATE_TABLES = `
+const CREATE_TABLES_V1 = `
 CREATE TABLE IF NOT EXISTS tracked_contact (
   id TEXT PRIMARY KEY NOT NULL,
   device_contact_id TEXT,
@@ -32,6 +34,8 @@ CREATE TABLE IF NOT EXISTS interaction (
   channel TEXT,
   created_at TEXT NOT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_interaction_contact ON interaction (contact_id, occurred_at);
+CREATE INDEX IF NOT EXISTS idx_interaction_occurred ON interaction (occurred_at);
 
 CREATE TABLE IF NOT EXISTS scheduled_reminder (
   id TEXT PRIMARY KEY NOT NULL,
@@ -41,6 +45,7 @@ CREATE TABLE IF NOT EXISTS scheduled_reminder (
   action TEXT,
   created_at TEXT NOT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_reminder_fire ON scheduled_reminder (fire_at);
 
 CREATE TABLE IF NOT EXISTS settings (
   id INTEGER PRIMARY KEY CHECK (id = 1),
@@ -56,4 +61,33 @@ CREATE TABLE IF NOT EXISTS settings (
   onboarding_completed INTEGER NOT NULL DEFAULT 0,
   schema_version INTEGER NOT NULL DEFAULT 1
 );
+INSERT OR IGNORE INTO settings (id) VALUES (1);
 `;
+
+/** MIGRATIONS[i] fait passer le schéma de la version i à la version i + 1. */
+const MIGRATIONS: string[] = [CREATE_TABLES_V1];
+
+type MigratableDb = Pick<SQLiteDatabase, 'execAsync' | 'getFirstAsync' | 'withTransactionAsync'>;
+
+/**
+ * Crée ou met à jour le schéma. La version courante est lue dans `PRAGMA user_version`
+ * et recopiée dans `settings.schema_version` (data-model.pdf, table settings).
+ */
+export async function migrate(db: MigratableDb): Promise<void> {
+  await db.execAsync('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
+
+  const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
+  let version = row?.user_version ?? 0;
+  if (version > SCHEMA_VERSION) {
+    throw new Error(`Base en version ${version}, plus récente que l'application (${SCHEMA_VERSION})`);
+  }
+
+  while (version < SCHEMA_VERSION) {
+    const next = version + 1;
+    await db.withTransactionAsync(async () => {
+      await db.execAsync(MIGRATIONS[version]);
+      await db.execAsync(`UPDATE settings SET schema_version = ${next}; PRAGMA user_version = ${next};`);
+    });
+    version = next;
+  }
+}

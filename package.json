@@ -4,9 +4,11 @@
   "main": "expo-router/entry",
   "dependencies": {
     "@expo/ui": "~58.0.21",
+    "@types/node": "22",
     "expo": "~58.0.16",
     "expo-constants": "~58.0.12",
     "expo-contacts": "~58.0.8",
+    "expo-crypto": "~58.0.7",
     "expo-dev-client": "~58.0.14",
     "expo-device": "~58.0.5",
     "expo-document-picker": "~58.0.4",
