@@ -248,10 +248,36 @@
     "importError": "L'import a échoué. Vos données n'ont pas été modifiées.",
     "openReview": "Ouvrir le bilan",
     "prepareReview": "Préparer un bilan de test",
-    "reviewPrepared": "Tous les contacts sont à « il y a 10 jours » et le bilan est disponible. Revenez à l'accueil."
+    "reviewPrepared": "Tous les contacts sont à « il y a 10 jours » et le bilan est disponible. Revenez à l'accueil.",
+    "restartOnboarding": "Revoir le premier lancement"
   },
   "language": {
     "fr": "Français",
     "en": "English"
+  },
+  "onboarding": {
+    "skip": "Passer",
+    "continue": "Continuer",
+    "later": "Plus tard",
+    "welcomeTitle": "Gardez le lien\navec vos proches",
+    "welcomeBody": "On vous rappelle de prendre des nouvelles. Vous continuez à appeler et écrire comme d'habitude.",
+    "bubble": "Ça fait longtemps ! 😊",
+    "contactsTitle": "Choisissez qui\nne pas oublier",
+    "contactsBody": "Remember a besoin de vos contacts pour que vous choisissiez les personnes à qui penser.",
+    "contactsPrivacy": "Vos contacts restent sur votre téléphone",
+    "contactsAction": "Autoriser les contacts",
+    "notificationsTitle": "Un petit rappel,\nau bon moment",
+    "notificationsBody": "Les rappels arrivent en notification, à l'heure de votre choix. Vous répondez en un geste.",
+    "notificationsAction": "Activer les rappels",
+    "sampleNow": "maintenant",
+    "sampleBody": "Pensez à prendre de ses nouvelles 💛",
+    "sampleNames": {
+      "marie": "Tantine Marie",
+      "paul": "Paul (cousin)",
+      "awa": "Awa",
+      "maman": "Maman",
+      "jonas": "Jonas"
+    },
+    "page": "Page {{current}} sur {{total}}"
   }
 }

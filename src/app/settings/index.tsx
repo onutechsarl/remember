@@ -12,6 +12,7 @@ import {
   Lock,
   Pause,
   RotateCcw,
+  Sparkles,
   Upload,
   type LucideIcon,
 } from 'lucide-react-native';
@@ -25,6 +26,7 @@ import { getDatabase } from '@/db/database';
 import { resetForReviewTest } from '@/db/repository';
 import { daysBetween } from '@/domain/dates';
 import { ImportError } from '@/domain/backup';
+import { useOnboarding } from '@/hooks/onboarding';
 import { saveSettings, useSettings } from '@/hooks/use-settings';
 import { exportData, importData, pickExportFile } from '@/services/backup';
 import { replan, scheduleTestReminder } from '@/services/planning';
@@ -41,6 +43,7 @@ export default function SettingsScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const { settings, setSettings, reload } = useSettings();
+  const { restartOnboarding } = useOnboarding();
   const ios = Platform.OS === 'ios';
   const background = ios ? colors.groupedBackground : colors.background;
 
@@ -228,6 +231,7 @@ export default function SettingsScreen() {
           <Group>
             <GroupRow label={t('settings.testReminder')} leading={row(BellRing)} onPress={() => void onTestReminder()} />
             <GroupRow label={t('settings.openReview')} leading={row(CalendarCheck)} onPress={() => router.push('/review')} />
+            <GroupRow label={t('settings.restartOnboarding')} leading={row(Sparkles)} onPress={() => void restartOnboarding()} />
             <GroupRow
               label={t('settings.prepareReview')}
               leading={row(RotateCcw)}

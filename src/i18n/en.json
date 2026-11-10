@@ -248,10 +248,36 @@
     "importError": "The import failed. Your data wasn't changed.",
     "openReview": "Open the check-in",
     "prepareReview": "Prepare a test check-in",
-    "reviewPrepared": "All contacts are set to “10 days ago” and the check-in is available. Go back to Home."
+    "reviewPrepared": "All contacts are set to “10 days ago” and the check-in is available. Go back to Home.",
+    "restartOnboarding": "Replay the first launch"
   },
   "language": {
     "fr": "Français",
     "en": "English"
+  },
+  "onboarding": {
+    "skip": "Skip",
+    "continue": "Continue",
+    "later": "Later",
+    "welcomeTitle": "Stay close\nto your people",
+    "welcomeBody": "We remind you to check in. You keep calling and texting the way you always do.",
+    "bubble": "It's been a while! 😊",
+    "contactsTitle": "Choose who\nnot to forget",
+    "contactsBody": "Remember needs your contacts so you can choose the people you want to keep in mind.",
+    "contactsPrivacy": "Your contacts stay on your phone",
+    "contactsAction": "Allow contacts",
+    "notificationsTitle": "A little reminder,\nat the right time",
+    "notificationsBody": "Reminders arrive as notifications, at the time you choose. You answer in one tap.",
+    "notificationsAction": "Turn on reminders",
+    "sampleNow": "now",
+    "sampleBody": "Time to check in 💛",
+    "sampleNames": {
+      "marie": "Aunt Marie",
+      "paul": "Paul (cousin)",
+      "awa": "Awa",
+      "maman": "Mom",
+      "jonas": "Jonas"
+    },
+    "page": "Page {{current}} of {{total}}"
   }
 }
