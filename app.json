@@ -77,6 +77,17 @@
           "icon": "./assets/images/notification-icon.png",
           "color": "#F76B15"
         }
+      ],
+      [
+        "./plugins/with-messaging-queries",
+        {
+          "schemes": [
+            "whatsapp",
+            "tg",
+            "sgnl",
+            "viber"
+          ]
+        }
       ]
     ],
     "experiments": {

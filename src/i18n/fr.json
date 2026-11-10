@@ -55,5 +55,58 @@
     "streak": "{{count}} semaines de lien",
     "happy": "Bravo, continuez !",
     "nudge": "Mémo s'impatiente !"
+  },
+  "channel": {
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "signal": "Signal",
+    "viber": "Viber",
+    "sms": "SMS",
+    "call": "Appel téléphonique"
+  },
+  "add": {
+    "title": "Ajouter des contacts",
+    "back": "Retour",
+    "search": "Rechercher",
+    "limited_one": "Accès limité : {{count}} contact autorisé.",
+    "limited_other": "Accès limité : {{count}} contacts autorisés.",
+    "manage": "Gérer",
+    "noPhone": "Sans numéro",
+    "alreadyTracked": "Déjà suivi",
+    "continue": "Continuer",
+    "continueCount": "Continuer ({{count}})",
+    "noResults": "Aucun contact ne correspond à « {{query}} ».",
+    "emptyDirectory": "Votre répertoire est vide.",
+    "denied": {
+      "title": "Accès aux contacts refusé",
+      "body": "Remember a besoin de vos contacts pour que vous choisissiez les personnes à qui penser. Ils restent sur votre téléphone.",
+      "action": "Ouvrir les Réglages"
+    },
+    "request": {
+      "title": "Choisissez vos proches",
+      "body": "Remember lit votre répertoire pour que vous choisissiez les personnes à qui penser. Vos contacts restent sur votre téléphone.",
+      "action": "Autoriser l'accès"
+    },
+    "setup": {
+      "step": "{{current}} sur {{total}}",
+      "stepAndroid": "Contact {{current}} sur {{total}}",
+      "frequency": "Tous les combien ?",
+      "default": "par défaut",
+      "lastContact": "Dernier échange",
+      "answer": {
+        "this_week": "Cette semaine",
+        "this_month": "Ce mois-ci",
+        "longer": "Plus longtemps",
+        "unknown": "Je ne sais pas"
+      },
+      "channel": "Messagerie habituelle",
+      "channelFooter": "Seules les messageries installées sont proposées.",
+      "noPhoneFooter": "Pas de numéro valide : aucune messagerie ne sera proposée pour ce contact.",
+      "applyAll": "Appliquer à tous les contacts",
+      "next": "Suivant",
+      "finish": "Terminer",
+      "skip": "Passer cette étape",
+      "saveError": "L'ajout n'a pas pu être enregistré. Réessayez."
+    }
   }
 }

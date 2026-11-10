@@ -34,18 +34,37 @@ type PrimaryProps = {
   label: string;
   onPress: () => void;
   icon?: LucideIcon;
+  disabled?: boolean;
+  /** Bouton en pleine largeur, en bas d'écran. */
+  block?: boolean;
 };
 
 /** Bouton principal : orange, texte blanc ; coins arrondis sur iOS, pilule sur Android. */
-export function PrimaryButton({ label, onPress, icon: Icon }: PrimaryProps) {
+export function PrimaryButton({ label, onPress, icon: Icon, disabled, block }: PrimaryProps) {
   const colors = useColors();
   return (
     <Pressable
       onPress={onPress}
+      disabled={disabled}
       accessibilityRole="button"
-      style={({ pressed }) => [styles.primary, { backgroundColor: colors.accent, opacity: pressed ? 0.85 : 1 }]}>
+      accessibilityState={{ disabled: !!disabled }}
+      style={({ pressed }) => [
+        styles.primary,
+        block && styles.block,
+        { backgroundColor: colors.accent, opacity: disabled ? 0.4 : pressed ? 0.85 : 1 },
+      ]}>
       {Icon && <Icon color={colors.onAccent} size={22} />}
       <Text style={[Type.button, { color: colors.onAccent }]}>{label}</Text>
+    </Pressable>
+  );
+}
+
+/** Action secondaire en texte orange foncé, sans fond (« Passer », « Retour »). */
+export function TextButton({ label, onPress, tone = 'accent' }: { label: string; onPress: () => void; tone?: 'accent' | 'destructive' }) {
+  const colors = useColors();
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button" hitSlop={8} style={({ pressed }) => [styles.text, { opacity: pressed ? 0.6 : 1 }]}>
+      <Text style={[Type.body, { color: tone === 'accent' ? colors.accentText : colors.red, fontWeight: '500' }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -71,6 +90,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     borderRadius: Platform.OS === 'ios' ? 16 : 27,
   },
+  block: { alignSelf: 'stretch' },
+  text: { alignItems: 'center', justifyContent: 'center', minHeight: 44, paddingHorizontal: 8 },
   badge: {
     position: 'absolute',
     top: -6,

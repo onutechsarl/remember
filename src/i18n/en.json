@@ -55,5 +55,58 @@
     "streak": "{{count}}-week streak",
     "happy": "Great, keep going!",
     "nudge": "Mémo is getting impatient!"
+  },
+  "channel": {
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "signal": "Signal",
+    "viber": "Viber",
+    "sms": "SMS",
+    "call": "Phone call"
+  },
+  "add": {
+    "title": "Add contacts",
+    "back": "Back",
+    "search": "Search",
+    "limited_one": "Limited access: {{count}} contact allowed.",
+    "limited_other": "Limited access: {{count}} contacts allowed.",
+    "manage": "Manage",
+    "noPhone": "No number",
+    "alreadyTracked": "Already added",
+    "continue": "Continue",
+    "continueCount": "Continue ({{count}})",
+    "noResults": "No contacts match “{{query}}”.",
+    "emptyDirectory": "Your address book is empty.",
+    "denied": {
+      "title": "Contacts access denied",
+      "body": "Remember needs your contacts so you can choose who to keep in mind. They stay on your phone.",
+      "action": "Open Settings"
+    },
+    "request": {
+      "title": "Choose your people",
+      "body": "Remember reads your address book so you can choose who to keep in mind. Your contacts stay on your phone.",
+      "action": "Allow access"
+    },
+    "setup": {
+      "step": "{{current}} of {{total}}",
+      "stepAndroid": "Contact {{current}} of {{total}}",
+      "frequency": "How often?",
+      "default": "default",
+      "lastContact": "Last contact",
+      "answer": {
+        "this_week": "This week",
+        "this_month": "This month",
+        "longer": "Longer ago",
+        "unknown": "I don't know"
+      },
+      "channel": "Usual app",
+      "channelFooter": "Only apps installed on your phone are shown.",
+      "noPhoneFooter": "No valid number: no messaging app will be offered for this contact.",
+      "applyAll": "Apply to all contacts",
+      "next": "Next",
+      "finish": "Done",
+      "skip": "Skip this step",
+      "saveError": "Couldn't save. Please try again."
+    }
   }
 }
