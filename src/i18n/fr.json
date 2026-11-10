@@ -1,0 +1,27 @@
+{
+  "app": {
+    "name": "Remember"
+  },
+  "home": {
+    "title": "Remember",
+    "due": "À recontacter",
+    "ok": "Tout va bien"
+  },
+  "reminder": {
+    "body": "Pensez à prendre des nouvelles de {{name}}.",
+    "write": "Écrire sur {{channel}}",
+    "done": "C'est déjà fait",
+    "later": "Plus tard"
+  },
+  "review": {
+    "title": "Bilan de la semaine",
+    "question": "Vous êtes-vous parlé cette semaine ?",
+    "yes": "On s'est parlé",
+    "no": "Non"
+  },
+  "widget": {
+    "streak": "{{count}} semaines de lien",
+    "happy": "Bravo, continuez !",
+    "nudge": "Mémo s'impatiente !"
+  }
+}

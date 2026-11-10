@@ -1,0 +1,27 @@
+{
+  "app": {
+    "name": "Remember"
+  },
+  "home": {
+    "title": "Remember",
+    "due": "Reach out",
+    "ok": "All good"
+  },
+  "reminder": {
+    "body": "Time to check in with {{name}}.",
+    "write": "Message on {{channel}}",
+    "done": "Already done",
+    "later": "Later"
+  },
+  "review": {
+    "title": "Weekly check-in",
+    "question": "Did you talk this week?",
+    "yes": "We talked",
+    "no": "No"
+  },
+  "widget": {
+    "streak": "{{count}}-week streak",
+    "happy": "Great, keep going!",
+    "nudge": "Mémo is getting impatient!"
+  }
+}
