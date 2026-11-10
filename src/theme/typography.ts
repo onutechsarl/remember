@@ -13,6 +13,7 @@ export const Type = StyleSheet.create({
   body: { fontFamily: family, fontSize: 17, fontWeight: '400' },
   secondary: { fontFamily: family, fontSize: 15, fontWeight: '400' },
   caption: { fontFamily: family, fontSize: 13, fontWeight: '600' },
-  groupHeader: { fontFamily: family, fontSize: 13, fontWeight: '400', textTransform: 'uppercase' },
+  // iOS 26 : titres de groupe en minuscules, plus lisibles qu'en petites majuscules.
+  groupHeader: { fontFamily: family, fontSize: 15, fontWeight: '500' },
   button: { fontFamily: family, fontSize: 17, fontWeight: '600' },
 });

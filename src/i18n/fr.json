@@ -59,12 +59,25 @@
     "title": "Bilan de la semaine",
     "question": "Vous êtes-vous parlé cette semaine ?",
     "yes": "On s'est parlé",
-    "no": "Non"
+    "no": "Non",
+    "progress": "{{current}} / {{total}}",
+    "lastContact": "Dernier échange noté {{ago}}",
+    "close": "Fermer",
+    "doneTitle": "Bilan terminé",
+    "doneBody": "Merci d'avoir pris ce petit moment.",
+    "upToDate_one": "personne à jour",
+    "upToDate_other": "personnes à jour",
+    "toContact": "à recontacter",
+    "emptyTitle": "Rien à passer en revue",
+    "emptyBody": "Vous avez des nouvelles récentes de tous vos proches. Revenez la semaine prochaine.",
+    "finish": "Terminer",
+    "swipeHint": "Glissez à droite si vous vous êtes parlé, à gauche sinon."
   },
   "widget": {
-    "streak": "{{count}} semaines de lien",
     "happy": "Bravo, continuez !",
-    "nudge": "Mémo s'impatiente !"
+    "nudge": "Mémo s'impatiente !",
+    "streak_one": "{{count}} semaine de lien",
+    "streak_other": "{{count}} semaines de lien"
   },
   "channel": {
     "whatsapp": "WhatsApp",
@@ -232,7 +245,10 @@
     "importDone_other": "{{count}} contacts importés.",
     "importInvalid": "Ce fichier n'est pas un export de Remember.",
     "importVersion": "Ce fichier vient d'une version plus récente de Remember. Mettez l'application à jour.",
-    "importError": "L'import a échoué. Vos données n'ont pas été modifiées."
+    "importError": "L'import a échoué. Vos données n'ont pas été modifiées.",
+    "openReview": "Ouvrir le bilan",
+    "prepareReview": "Préparer un bilan de test",
+    "reviewPrepared": "Tous les contacts sont à « il y a 10 jours » et le bilan est disponible. Revenez à l'accueil."
   },
   "language": {
     "fr": "Français",

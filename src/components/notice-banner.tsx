@@ -1,6 +1,7 @@
 import { ChevronRight, type LucideIcon } from 'lucide-react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { RADIUS } from '@/theme/radius';
 import { Type } from '@/theme/typography';
 import { useColors } from '@/theme/use-colors';
 
@@ -28,6 +29,6 @@ export function NoticeBanner({ icon: Icon, title, body, onPress }: Props) {
 }
 
 const styles = StyleSheet.create({
-  banner: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, padding: 14, marginHorizontal: 20 },
+  banner: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: RADIUS.card, borderCurve: 'continuous', padding: 14, marginHorizontal: 20 },
   texts: { flex: 1, gap: 2 },
 });

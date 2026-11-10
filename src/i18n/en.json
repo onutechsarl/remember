@@ -59,12 +59,25 @@
     "title": "Weekly check-in",
     "question": "Did you talk this week?",
     "yes": "We talked",
-    "no": "No"
+    "no": "No",
+    "progress": "{{current}} / {{total}}",
+    "lastContact": "Last contact noted {{ago}}",
+    "close": "Close",
+    "doneTitle": "Check-in done",
+    "doneBody": "Thanks for taking this little moment.",
+    "upToDate_one": "person up to date",
+    "upToDate_other": "people up to date",
+    "toContact": "to reach out to",
+    "emptyTitle": "Nothing to review",
+    "emptyBody": "You've been in touch with everyone recently. Come back next week.",
+    "finish": "Done",
+    "swipeHint": "Swipe right if you talked, left if not."
   },
   "widget": {
-    "streak": "{{count}}-week streak",
     "happy": "Great, keep going!",
-    "nudge": "Mémo is getting impatient!"
+    "nudge": "Mémo is getting impatient!",
+    "streak_one": "{{count}}-week streak",
+    "streak_other": "{{count}}-week streak"
   },
   "channel": {
     "whatsapp": "WhatsApp",
@@ -232,7 +245,10 @@
     "importDone_other": "{{count}} contacts imported.",
     "importInvalid": "This file isn't a Remember export.",
     "importVersion": "This file comes from a newer version of Remember. Please update the app.",
-    "importError": "The import failed. Your data wasn't changed."
+    "importError": "The import failed. Your data wasn't changed.",
+    "openReview": "Open the check-in",
+    "prepareReview": "Prepare a test check-in",
+    "reviewPrepared": "All contacts are set to “10 days ago” and the check-in is available. Go back to Home."
   },
   "language": {
     "fr": "Français",

@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { BellOff, ChevronDown, Plus, Settings as SettingsIcon, UserPlus, Users } from 'lucide-react-native';
+import { BellOff, ChevronDown, Plus, Settings as SettingsIcon, UserPlus } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Linking, Pressable, SectionList, StyleSheet, Text, View } from 'react-native';
@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PrimaryButton, RoundIconButton } from '@/components/buttons';
 import { ContactRow } from '@/components/contact-row';
+import { Memo } from '@/components/memo';
 import { NoticeBanner } from '@/components/notice-banner';
 import { ReviewFab } from '@/components/review-fab';
 import type { TrackedContact } from '@/domain/types';
@@ -49,6 +50,7 @@ export default function HomeScreen() {
             <ActivityIndicator color={colors.accent} />
           ) : (
             <>
+              <Memo mood="sad" size={120} />
               <Text style={[Type.body, { color: colors.textSecondary }]}>{t('common.loadError')}</Text>
               <PrimaryButton label={t('common.retry')} onPress={() => void reload()} />
             </>
@@ -160,8 +162,8 @@ function EmptyState() {
   const colors = useColors();
   return (
     <View style={styles.empty}>
-      <View style={[styles.illustration, { backgroundColor: colors.accentSoft }]}>
-        <Users color={colors.accent} size={64} strokeWidth={1.8} />
+      <View style={styles.illustration}>
+        <Memo mood="happy" size={170} />
       </View>
       <Text style={[Type.sectionTitle, styles.emptyTitle, { color: colors.text }]}>{t('home.empty.title')}</Text>
       <Text style={[Type.body, styles.emptyBody, { color: colors.textSecondary }]}>{t('home.empty.body')}</Text>
@@ -185,7 +187,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32, paddingBottom: 80 },
-  illustration: { width: 180, height: 180, borderRadius: 90, alignItems: 'center', justifyContent: 'center', marginBottom: 24 },
+  illustration: { marginBottom: 16 },
   emptyTitle: { fontSize: 26, textAlign: 'center' },
   emptyBody: { textAlign: 'center', marginTop: 8, marginBottom: 28 },
 });

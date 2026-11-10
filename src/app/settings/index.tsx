@@ -11,20 +11,23 @@ import {
   Globe,
   Lock,
   Pause,
+  RotateCcw,
   Upload,
   type LucideIcon,
 } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, Platform, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Toggle } from '@/components/toggle';
 import { Group, GroupHeader, GroupRow, IconBadge, RowValue } from '@/components/form';
 import { getDatabase } from '@/db/database';
+import { resetForReviewTest } from '@/db/repository';
 import { daysBetween } from '@/domain/dates';
 import { ImportError } from '@/domain/backup';
 import { saveSettings, useSettings } from '@/hooks/use-settings';
 import { exportData, importData, pickExportFile } from '@/services/backup';
-import { scheduleTestReminder } from '@/services/planning';
+import { replan, scheduleTestReminder } from '@/services/planning';
 import { Type } from '@/theme/typography';
 import { useColors } from '@/theme/use-colors';
 import { formatShortDate, formatTime, formatWeekday } from '@/utils/format';
@@ -60,7 +63,7 @@ export default function SettingsScreen() {
     language: { current: settings.language },
   };
   const open = (sheet: Sheet) => () => router.push({ pathname: `/settings/${sheet}`, params: params[sheet] });
-  const chevron = ios ? <ChevronRight color={colors.textSecondary} size={20} /> : undefined;
+  const chevron = ios ? <ChevronRight color={colors.chevron} size={18} strokeWidth={2.5} /> : undefined;
   const value = (text: string) => (
     <>
       <RowValue>{text}</RowValue>
@@ -111,6 +114,13 @@ export default function SettingsScreen() {
     ]);
   };
 
+  const onPrepareReview = async () => {
+    const db = await getDatabase();
+    await resetForReviewTest(db, new Date());
+    await replan(db);
+    Alert.alert(t('settings.reviewPrepared'));
+  };
+
   const onTestReminder = async () => {
     const scheduled = await scheduleTestReminder(await getDatabase());
     Alert.alert(t(scheduled ? 'settings.testScheduled' : 'settings.testNoContact'));
@@ -120,9 +130,6 @@ export default function SettingsScreen() {
     <ScrollView
       style={{ backgroundColor: background }}
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
-      <Text style={[Type.largeTitle, styles.title, { color: colors.text }]} accessibilityRole="header">
-        {t('common.settings')}
-      </Text>
       <GroupHeader>{t('settings.reminders')}</GroupHeader>
       <Group>
         <GroupRow
@@ -158,13 +165,12 @@ export default function SettingsScreen() {
           accessibilityRole="switch"
           last={!settings.weeklyReviewEnabled}
           trailing={
-            <Switch
+            <Toggle
               value={settings.weeklyReviewEnabled}
               onValueChange={(enabled) => {
                 setSettings({ ...settings, weeklyReviewEnabled: enabled });
                 void saveSettings({ weeklyReviewEnabled: enabled }).then(setSettings);
               }}
-              trackColor={{ true: colors.accent, false: colors.fill }}
               accessibilityLabel={t('settings.review')}
             />
           }
@@ -220,10 +226,12 @@ export default function SettingsScreen() {
         <>
           <GroupHeader>{t('settings.dev')}</GroupHeader>
           <Group>
+            <GroupRow label={t('settings.testReminder')} leading={row(BellRing)} onPress={() => void onTestReminder()} />
+            <GroupRow label={t('settings.openReview')} leading={row(CalendarCheck)} onPress={() => router.push('/review')} />
             <GroupRow
-              label={t('settings.testReminder')}
-              leading={row(BellRing)}
-              onPress={() => void onTestReminder()}
+              label={t('settings.prepareReview')}
+              leading={row(RotateCcw)}
+              onPress={() => void onPrepareReview()}
               last
             />
           </Group>
@@ -236,7 +244,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   content: { paddingHorizontal: 20 },
-  title: { marginTop: 4, marginBottom: 4 },
   privacy: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, paddingTop: 16 },
   privacyText: { flex: 1, fontWeight: '400', lineHeight: 18 },
 });

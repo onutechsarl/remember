@@ -389,3 +389,18 @@ export async function replaceAllData(
   });
   return file.contacts.length;
 }
+
+/**
+ * Développement : prépare un bilan de test. Tous les contacts suivis passent à « dernier échange
+ * il y a `daysAgo` jours », et la date du dernier bilan est effacée (le bouton de l'accueil réapparaît).
+ */
+export async function resetForReviewTest(db: Db, now: Date, daysAgo = 10): Promise<void> {
+  const date = toIso(addDays(now, -daysAgo));
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      "UPDATE tracked_contact SET last_contact_at = ?, last_contact_source = 'manual_edit', updated_at = ? WHERE archived_at IS NULL",
+      [date, toIso(now)],
+    );
+    await db.runAsync('UPDATE settings SET last_weekly_review_at = NULL WHERE id = 1', []);
+  });
+}

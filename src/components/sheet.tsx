@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Type } from '@/theme/typography';
 import { useColors } from '@/theme/use-colors';
 
-import { PrimaryButton } from './buttons';
+import { GlassIconButton, PrimaryButton } from './buttons';
 import { InSheetContext, ROW_INSET } from './form';
 
 type Confirm = { label: string; onPress: () => void; disabled?: boolean };
@@ -29,6 +29,7 @@ type Props = {
  * - Android (Material 3) : titre, listes pleine largeur, bouton de validation en bas.
  */
 export function Sheet({ title, hint, footer, confirm, children }: Props) {
+  const { t } = useTranslation();
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const ios = Platform.OS === 'ios';
@@ -41,7 +42,7 @@ export function Sheet({ title, hint, footer, confirm, children }: Props) {
       ]}>
       {ios ? (
         <View style={styles.bar}>
-          <CircleButton kind="close" onPress={() => router.back()} />
+          <GlassIconButton icon={X} size={40} onPress={() => router.back()} accessibilityLabel={t('common.cancel')} />
           <Text style={[Type.name, styles.barTitle, { color: colors.text }]} numberOfLines={1} accessibilityRole="header">
             {title}
           </Text>

@@ -2,6 +2,7 @@ import { Check, Search, type LucideIcon } from 'lucide-react-native';
 import { createContext, useContext, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
 
+import { RADIUS } from '@/theme/radius';
 import { Type } from '@/theme/typography';
 import { useColors } from '@/theme/use-colors';
 
@@ -67,8 +68,11 @@ export function GroupFooter({ children }: { children: string }) {
   );
 }
 
-/** Marge intérieure gauche et droite des lignes : assez large pour les coins arrondis d'iOS. */
+/** Marge intérieure gauche et droite des lignes : 20 sur iOS (cartes très arrondies), 16 sur Android. */
 export const ROW_INSET = Platform.OS === 'ios' ? 20 : 16;
+
+/** Hauteur minimale d'une ligne : un peu plus aérée sur iOS, comme les Réglages. */
+export const ROW_HEIGHT = Platform.OS === 'ios' ? 56 : 52;
 
 /** Vrai dans un panneau qui monte du bas (fourni par `Sheet`). */
 export const InSheetContext = createContext(false);
@@ -169,19 +173,18 @@ export function OptionCard({ label, selected, onPress }: { label: string; select
 }
 
 const styles = StyleSheet.create({
-  search: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: 12, paddingHorizontal: 12, minHeight: 44 },
+  search: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: RADIUS.field, paddingHorizontal: 12, minHeight: 44 },
   searchInput: { flex: 1, paddingVertical: 10 },
   mark: { width: 26, height: 26, alignItems: 'center', justifyContent: 'center' },
-  // Marge du texte des lignes : 20 sur iOS (coins de 26, comme iOS 26), 16 sur Android.
   groupHeader: { paddingHorizontal: ROW_INSET, paddingTop: 22, paddingBottom: 8 },
   groupFooter: { paddingHorizontal: ROW_INSET, paddingTop: 8 },
   // Dans un panneau iOS : carte décalée de 16 + marge du texte des lignes.
   sheetText: { paddingHorizontal: 16 + ROW_INSET },
-  group: { borderRadius: Platform.OS === 'ios' ? 26 : 24, borderCurve: 'continuous', overflow: 'hidden' },
+  group: { borderRadius: RADIUS.card, borderCurve: 'continuous', overflow: 'hidden' },
   sheetGroup: { marginHorizontal: 16 },
   flushGroup: { overflow: 'hidden' },
-  row: { flexDirection: 'row', alignItems: 'center', paddingLeft: ROW_INSET, gap: 12, minHeight: 52 },
-  rowContent: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingRight: ROW_INSET, minHeight: 52 },
+  row: { flexDirection: 'row', alignItems: 'center', paddingLeft: ROW_INSET, gap: 14, minHeight: ROW_HEIGHT },
+  rowContent: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingRight: ROW_INSET, minHeight: ROW_HEIGHT },
   rowLabel: { flex: 1 },
   radio: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   radioDot: { width: 11, height: 11, borderRadius: 6 },
@@ -195,7 +198,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     minHeight: 50,
-    borderRadius: 14,
+    borderRadius: RADIUS.field,
+    borderCurve: 'continuous',
     borderWidth: 1.5,
   },
   chip: {
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({
     gap: 6,
     minHeight: 40,
     paddingHorizontal: 16,
-    borderRadius: 10,
+    borderRadius: RADIUS.small,
     borderWidth: 1,
   },
 });

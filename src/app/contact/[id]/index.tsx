@@ -18,7 +18,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Avatar } from '@/components/avatar';
 import { ChannelIcon, channelGlyph } from '@/components/channel-icon';
-import { Group, GroupHeader, GroupRow, IconBadge, RowValue } from '@/components/form';
+import { Group, GroupHeader, GroupRow, IconBadge, ROW_HEIGHT, ROW_INSET, RowValue } from '@/components/form';
 import { getDatabase } from '@/db/database';
 import { archiveContact } from '@/db/repository';
 import { daysBetween } from '@/domain/dates';
@@ -27,6 +27,7 @@ import { urgency, urgencyLevel } from '@/domain/urgency';
 import { useContact, type ContactData } from '@/hooks/use-contact';
 import { effectiveChannel, openConversation } from '@/services/messaging';
 import { noteInteraction, replan } from '@/services/planning';
+import { RADIUS } from '@/theme/radius';
 import { Type } from '@/theme/typography';
 import { useColors } from '@/theme/use-colors';
 import { formatShortDate, formatUpcoming } from '@/utils/format';
@@ -144,7 +145,7 @@ function ContactDetails({ data, onChanged }: { data: ContactData; onChanged: () 
       ? formatUpcoming(data.nextReminder, now, i18n.language, { today: t('contact.today'), tomorrow: t('contact.tomorrow') })
       : t('contact.noReminder');
 
-  const chevron = ios ? <ChevronRight color={colors.textSecondary} size={20} /> : undefined;
+  const chevron = ios ? <ChevronRight color={colors.chevron} size={18} strokeWidth={2.5} /> : undefined;
   const open = (sheet: 'frequency' | 'channel' | 'last-contact') => () =>
     router.push({
       pathname: `/contact/[id]/${sheet}`,
@@ -269,7 +270,7 @@ function ActionTile({ icon: Icon, label, onPress }: { icon: LucideIcon; label: s
       accessibilityLabel={label}
       style={({ pressed }) => [
         styles.tile,
-        { backgroundColor: colors.accent, opacity: pressed ? 0.85 : 1, borderRadius: Platform.OS === 'ios' ? 16 : 24 },
+        { backgroundColor: colors.accent, opacity: pressed ? 0.85 : 1, borderRadius: RADIUS.button, borderCurve: 'continuous' },
       ]}>
       <Icon color={colors.onAccent} size={26} />
       <Text style={[Type.name, { color: colors.onAccent, fontSize: 15 }]} numberOfLines={1}>
@@ -323,5 +324,5 @@ const styles = StyleSheet.create({
   notice: { flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: 12, padding: 12, marginBottom: 16, marginTop: 4 },
   noticeText: { flex: 1 },
   section: { marginTop: 24 },
-  stop: { paddingHorizontal: 16, minHeight: 52, justifyContent: 'center' },
+  stop: { paddingHorizontal: ROW_INSET, minHeight: ROW_HEIGHT, justifyContent: 'center' },
 });

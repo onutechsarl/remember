@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Info, Users } from 'lucide-react-native';
+import { Info } from 'lucide-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,6 +18,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AlphabetIndex } from '@/components/alphabet-index';
 import { Avatar } from '@/components/avatar';
 import { PrimaryButton } from '@/components/buttons';
+import { Memo } from '@/components/memo';
 import { SearchField, SelectionMark, Tag } from '@/components/form';
 import { getDatabase } from '@/db/database';
 import { trackedKeys } from '@/db/repository';
@@ -145,8 +146,8 @@ export default function SelectContactsScreen() {
     const denied = access === 'denied';
     return (
       <View style={[styles.centered, { backgroundColor: colors.background }]}>
-        <View style={[styles.illustration, { backgroundColor: colors.accentSoft }]}>
-          <Users color={colors.accent} size={56} strokeWidth={1.8} />
+        <View style={styles.illustration}>
+          <Memo mood={denied ? 'sad' : 'happy'} size={150} />
         </View>
         <Text style={[Type.sectionTitle, styles.centerText, { color: colors.text }]}>
           {t(denied ? 'add.denied.title' : 'add.request.title')}
@@ -290,7 +291,7 @@ function DirectoryRow({
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 14, padding: 32 },
-  illustration: { width: 140, height: 140, borderRadius: 70, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
+  illustration: { marginBottom: 8 },
   centerText: { textAlign: 'center' },
   listHeader: { paddingLeft: 20, paddingRight: 34, paddingTop: 4, paddingBottom: 4, gap: 10 },
   limited: { flexDirection: 'row', alignItems: 'center', gap: 8 },

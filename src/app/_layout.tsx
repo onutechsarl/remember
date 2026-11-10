@@ -93,8 +93,9 @@ function AppStack() {
       <Stack.Screen
         name="settings/index"
         options={{
-          // Le grand titre « Réglages » est affiché par l'écran lui-même (comme l'accueil).
-          title: '',
+          // Petit titre centré, comme l'app Réglages d'iOS.
+          title: t('common.settings'),
+          headerTitleAlign: 'center',
           headerBackTitle: t('settings.back'),
           headerShadowVisible: false,
           headerStyle: { backgroundColor: Platform.OS === 'ios' ? colors.groupedBackground : colors.background },

@@ -2,11 +2,12 @@ import { Redirect, router, Stack, useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronRight } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Platform, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ChannelIcon } from '@/components/channel-icon';
 import { PrimaryButton, TextButton } from '@/components/buttons';
+import { Toggle } from '@/components/toggle';
 import { Group, GroupFooter, GroupHeader, GroupRow, OptionCard, Tag } from '@/components/form';
 import { getDatabase } from '@/db/database';
 import { addContacts } from '@/db/repository';
@@ -158,7 +159,7 @@ export default function ContactSetupScreen() {
                 label={t(`channel.${setup.preferredChannel}`)}
                 leading={<ChannelIcon channel={setup.preferredChannel} />}
                 trailing={
-                  ios ? <ChevronRight color={colors.textSecondary} size={20} /> : <ChevronDown color={colors.text} size={22} />
+                  ios ? <ChevronRight color={colors.chevron} size={18} strokeWidth={2.5} /> : <ChevronDown color={colors.text} size={22} />
                 }
                 last
                 onPress={() => router.push({ pathname: '/add/channel', params: { id: contact.deviceContactId } })}
@@ -179,10 +180,9 @@ export default function ContactSetupScreen() {
                 last
                 onPress={() => setApplyAll((v) => !v)}
                 trailing={
-                  <Switch
+                  <Toggle
                     value={applyAll}
                     onValueChange={setApplyAll}
-                    trackColor={{ true: colors.accent, false: colors.fill }}
                     accessibilityLabel={t('add.setup.applyAll')}
                   />
                 }

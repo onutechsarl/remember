@@ -1,7 +1,9 @@
+import { GlassView, isGlassEffectAPIAvailable, isLiquidGlassAvailable } from 'expo-glass-effect';
 import type { LucideIcon } from 'lucide-react-native';
 import type { ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { RADIUS } from '@/theme/radius';
 import { Type } from '@/theme/typography';
 import { useColors } from '@/theme/use-colors';
 
@@ -13,10 +15,41 @@ type RoundProps = {
   variant: 'accent' | 'neutral';
 };
 
+/** Verre liquide disponible : iOS 26 et plus, sans « Réduire la transparence ». */
+const glassAvailable = Platform.OS === 'ios' && isGlassEffectAPIAvailable() && isLiquidGlassAvailable();
+
+type GlassProps = { icon: LucideIcon; onPress: () => void; accessibilityLabel: string; size?: number };
+
+/**
+ * Bouton rond neutre (fermer, réglages) : en verre liquide sur iOS 26, comme les boutons du
+ * système ; rond gris ailleurs.
+ */
+export function GlassIconButton({ icon: Icon, onPress, accessibilityLabel, size = 44 }: GlassProps) {
+  const colors = useColors();
+  const shape = { width: size, height: size, borderRadius: size / 2 };
+  const icon = <Icon color={colors.text} size={size * 0.48} strokeWidth={2.4} />;
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel} hitSlop={6}>
+      {({ pressed }) =>
+        glassAvailable ? (
+          <GlassView isInteractive glassEffectStyle="regular" style={[styles.center, shape]}>
+            {icon}
+          </GlassView>
+        ) : (
+          <View style={[styles.center, shape, { backgroundColor: colors.fill, opacity: pressed ? 0.7 : 1 }]}>{icon}</View>
+        )
+      }
+    </Pressable>
+  );
+}
+
 /** Bouton rond d'en-tête (maquettes, planche des composants). */
 export function RoundIconButton({ icon: Icon, onPress, accessibilityLabel, variant }: RoundProps) {
   const colors = useColors();
   const accent = variant === 'accent';
+  if (!accent && Platform.OS === 'ios') {
+    return <GlassIconButton icon={Icon} onPress={onPress} accessibilityLabel={accessibilityLabel} />;
+  }
   const background = accent ? colors.accent : Platform.OS === 'ios' ? colors.fill : 'transparent';
   return (
     <Pressable
@@ -80,6 +113,7 @@ export function Badge({ children }: { children: ReactNode }) {
 }
 
 const styles = StyleSheet.create({
+  center: { alignItems: 'center', justifyContent: 'center' },
   round: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
   primary: {
     flexDirection: 'row',
@@ -88,7 +122,9 @@ const styles = StyleSheet.create({
     gap: 10,
     minHeight: 54,
     paddingHorizontal: 28,
-    borderRadius: Platform.OS === 'ios' ? 16 : 27,
+    // Android garde la pilule de Material 3.
+    borderRadius: Platform.OS === 'ios' ? RADIUS.button : 27,
+    borderCurve: 'continuous',
   },
   block: { alignSelf: 'stretch' },
   text: { alignItems: 'center', justifyContent: 'center', minHeight: 44, paddingHorizontal: 8 },
