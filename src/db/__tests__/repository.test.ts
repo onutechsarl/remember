@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { day, NOW } from '@/domain/__fixtures__';
 import { planReminders } from '@/domain/reminder-planner';
+import { buildExport } from '@/domain/backup';
 import { DEFAULT_SETTINGS } from '@/domain/types';
 
 import { createTestDb } from '../__fixtures__/test-db';
@@ -18,6 +19,7 @@ import {
   listInteractions,
   nextReminderFor,
   recordInteraction,
+  replaceAllData,
   replaceFutureReminders,
   snoozeContactReminder,
   syncLastRemindedAt,
@@ -209,5 +211,38 @@ describe('rappels programmés', () => {
   it('ignore les rappels planifiés dans le passé', async () => {
     const created = await replaceFutureReminders(db, [{ contactId: null, kind: 'reopen', fireAt: day(-1) }], NOW);
     expect(created).toEqual([]);
+  });
+});
+
+describe('import', () => {
+  it('remplace toutes les données et relie les contacts au répertoire par le numéro', async () => {
+    const [created] = await addContacts(db, [marie, paul], NOW);
+    await recordInteraction(db, { contactId: created.id, occurredAt: day(-3), source: 'weekly_review' }, day(-3));
+    const settings = { ...(await getSettings(db)), maxRemindersPerDay: 4 };
+    const file = buildExport(settings, await listActiveContacts(db), await listInteractions(db), NOW);
+
+    // Nouveau téléphone : autre base, autres identifiants de répertoire.
+    const other = await createTestDb();
+    await addContacts(other, [{ ...marie, displayName: 'À remplacer', phoneE164: '+15145550199', deviceContactId: 'z' }], NOW);
+    const count = await replaceAllData(other, file, new Map([['+237699123456', 'nouveau-id']]), day(1));
+
+    expect(count).toBe(2);
+    expect((await getSettings(other)).maxRemindersPerDay).toBe(4);
+    const imported = await listActiveContacts(other);
+    expect(imported.map((c) => c.displayName)).toEqual(['Paul', 'Tantine Marie']);
+    const importedMarie = imported.find((c) => c.displayName === 'Tantine Marie');
+    expect(importedMarie).toMatchObject({ deviceContactId: 'nouveau-id', lastContactSource: 'weekly_review' });
+    expect(imported.find((c) => c.displayName === 'Paul')?.deviceContactId).toBeNull();
+    expect(await listInteractions(other, { contactId: importedMarie?.id })).toHaveLength(2);
+  });
+
+  it('ne modifie rien si l’import échoue', async () => {
+    await addContacts(db, [marie], NOW);
+    const file = buildExport(DEFAULT_SETTINGS, [], [], NOW);
+    // Deux contacts avec le même numéro : contrainte d'unicité violée au milieu de l'import.
+    const duplicate = { displayName: 'A', phoneE164: '+33612345678', frequencyDays: 14 as const, preferredChannel: 'sms' as const, lastContactAt: NOW.toISOString(), interactions: [] };
+    file.contacts = [duplicate, { ...duplicate, displayName: 'B' }];
+    await expect(replaceAllData(db, file, new Map(), NOW)).rejects.toThrow(/UNIQUE/);
+    expect((await listActiveContacts(db)).map((c) => c.displayName)).toEqual(['Tantine Marie']);
   });
 });

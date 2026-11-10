@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { formatShortDate, formatUpcoming } from '../format';
+import { formatShortDate, formatUpcoming, formatWeekday } from '../format';
 
 const now = new Date(2026, 9, 19, 10, 0); // lundi 19 octobre 2026
 const labels = { today: 'Aujourd’hui', tomorrow: 'Demain' };
@@ -20,5 +20,13 @@ describe('formatShortDate', () => {
   it('suit la langue', () => {
     expect(formatShortDate(new Date(2026, 8, 28), 'fr')).toBe('28 sept.');
     expect(formatShortDate(new Date(2026, 8, 28), 'en')).toBe('Sep 28');
+  });
+});
+
+describe('formatWeekday', () => {
+  it('donne le jour ISO dans la langue', () => {
+    expect(formatWeekday(1, 'fr', 'long')).toBe('Lundi');
+    expect(formatWeekday(7, 'fr')).toBe('Dim.');
+    expect(formatWeekday(7, 'en')).toBe('Sun');
   });
 });

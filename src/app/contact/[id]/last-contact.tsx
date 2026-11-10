@@ -1,9 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
 
-import { PrimaryButton } from '@/components/buttons';
 import { DayPicker } from '@/components/day-picker';
 import { Sheet } from '@/components/sheet';
 import { recordInteraction } from '@/db/repository';
@@ -37,15 +35,11 @@ export default function LastContactSheet() {
   };
 
   return (
-    <Sheet title={t('contact.sheet.lastContact')} hint={t('contact.sheet.lastContactHint')}>
+    <Sheet
+      title={t('contact.sheet.lastContact')}
+      hint={t('contact.sheet.lastContactHint')}
+      confirm={{ label: t('common.save'), disabled: saving, onPress: () => void onSave() }}>
       <DayPicker value={day} max={today} onChange={setDay} />
-      <View style={styles.button}>
-        <PrimaryButton block disabled={saving} label={t('common.save')} onPress={() => void onSave()} />
-      </View>
     </Sheet>
   );
 }
-
-const styles = StyleSheet.create({
-  button: { marginTop: 12 },
-});

@@ -1,5 +1,5 @@
 import { Check, Search, type LucideIcon } from 'lucide-react-native';
-import type { ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
 
 import { Type } from '@/theme/typography';
@@ -46,8 +46,9 @@ export function SelectionMark({ checked, disabled }: { checked: boolean; disable
 /** Titre de groupe : majuscules grises sur iOS, texte orange sur Android. */
 export function GroupHeader({ children }: { children: string }) {
   const colors = useColors();
+  const inset = useContext(InSheetContext) && Platform.OS === 'ios' && styles.sheetText;
   return Platform.OS === 'ios' ? (
-    <Text style={[Type.groupHeader, styles.groupHeader, { color: colors.textSecondary }]} accessibilityRole="header">
+    <Text style={[Type.groupHeader, styles.groupHeader, inset, { color: colors.textSecondary }]} accessibilityRole="header">
       {children}
     </Text>
   ) : (
@@ -60,14 +61,36 @@ export function GroupHeader({ children }: { children: string }) {
 /** Note sous un groupe. */
 export function GroupFooter({ children }: { children: string }) {
   const colors = useColors();
-  return <Text style={[Type.caption, styles.groupFooter, { color: colors.textSecondary, fontWeight: '400' }]}>{children}</Text>;
+  const inset = useContext(InSheetContext) && Platform.OS === 'ios' && styles.sheetText;
+  return (
+    <Text style={[Type.caption, styles.groupFooter, inset, { color: colors.textSecondary, fontWeight: '400' }]}>{children}</Text>
+  );
 }
 
-/** Groupe de lignes sur fond blanc arrondi (listes groupées d'iOS). */
+/** Marge intérieure gauche et droite des lignes : assez large pour les coins arrondis d'iOS. */
+export const ROW_INSET = Platform.OS === 'ios' ? 20 : 16;
+
+/** Vrai dans un panneau qui monte du bas (fourni par `Sheet`). */
+export const InSheetContext = createContext(false);
+
+/**
+ * Groupe de lignes.
+ * - iOS : carte blanche très arrondie, comme les listes groupées d'iOS 26 (Réglages) ; dans un
+ *   panneau, décalée de 16 des bords.
+ * - Android : carte orange pâle arrondie sur un écran ; pleine largeur dans un panneau (Material 3).
+ */
 export function Group({ children }: { children: ReactNode }) {
   const colors = useColors();
+  const inSheet = useContext(InSheetContext);
+  if (Platform.OS !== 'ios') {
+    return (
+      <View style={[inSheet ? styles.flushGroup : styles.group, { backgroundColor: inSheet ? colors.surface : colors.accentSoft }]}>
+        {children}
+      </View>
+    );
+  }
   return (
-    <View style={[styles.group, { backgroundColor: Platform.OS === 'ios' ? colors.surface : colors.accentSoft }]}>{children}</View>
+    <View style={[styles.group, inSheet && styles.sheetGroup, { backgroundColor: colors.surface }]}>{children}</View>
   );
 }
 
@@ -149,16 +172,21 @@ const styles = StyleSheet.create({
   search: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: 12, paddingHorizontal: 12, minHeight: 44 },
   searchInput: { flex: 1, paddingVertical: 10 },
   mark: { width: 26, height: 26, alignItems: 'center', justifyContent: 'center' },
-  groupHeader: { paddingHorizontal: 16, paddingTop: 22, paddingBottom: 8 },
-  groupFooter: { paddingHorizontal: 16, paddingTop: 8 },
-  group: { borderRadius: Platform.OS === 'ios' ? 14 : 24, overflow: 'hidden' },
-  row: { flexDirection: 'row', alignItems: 'center', paddingLeft: 16, gap: 12, minHeight: 52 },
-  rowContent: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingRight: 16, minHeight: 52 },
+  // Marge du texte des lignes : 20 sur iOS (coins de 26, comme iOS 26), 16 sur Android.
+  groupHeader: { paddingHorizontal: ROW_INSET, paddingTop: 22, paddingBottom: 8 },
+  groupFooter: { paddingHorizontal: ROW_INSET, paddingTop: 8 },
+  // Dans un panneau iOS : carte décalée de 16 + marge du texte des lignes.
+  sheetText: { paddingHorizontal: 16 + ROW_INSET },
+  group: { borderRadius: Platform.OS === 'ios' ? 26 : 24, borderCurve: 'continuous', overflow: 'hidden' },
+  sheetGroup: { marginHorizontal: 16 },
+  flushGroup: { overflow: 'hidden' },
+  row: { flexDirection: 'row', alignItems: 'center', paddingLeft: ROW_INSET, gap: 12, minHeight: 52 },
+  rowContent: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingRight: ROW_INSET, minHeight: 52 },
   rowLabel: { flex: 1 },
   radio: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   radioDot: { width: 11, height: 11, borderRadius: 6 },
   tag: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
-  badge: { width: 32, height: 32, borderRadius: Platform.OS === 'ios' ? 8 : 16, alignItems: 'center', justifyContent: 'center' },
+  badge: { alignItems: 'center', justifyContent: 'center' },
   rowValue: { flexShrink: 1, textAlign: 'right' },
   card: {
     flex: 1,
@@ -181,11 +209,20 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Icône blanche dans un petit carré coloré (iOS) ou un cercle (Android), en tête de ligne. */
-export function IconBadge({ icon: Icon, color }: { icon: LucideIcon; color: string }) {
+/**
+ * Pastille d'icône en tête de ligne, identique dans toute l'app : icône orange sur fond orange pâle
+ * (carré arrondi sur iOS, cercle sur Android). Pas de couleur par ligne, messageries comprises.
+ */
+export function IconBadge({ icon: Icon, size = 32 }: { icon: LucideIcon; size?: number }) {
+  const colors = useColors();
   return (
-    <View style={[styles.badge, { backgroundColor: color }]}>
-      <Icon color="#FFFFFF" size={19} strokeWidth={2.2} />
+    <View
+      style={[
+        styles.badge,
+        { width: size, height: size, borderRadius: Platform.OS === 'ios' ? size / 4 : size / 2 },
+        { backgroundColor: colors.accentSoft },
+      ]}>
+      <Icon color={colors.accent} size={size * 0.58} strokeWidth={2} />
     </View>
   );
 }

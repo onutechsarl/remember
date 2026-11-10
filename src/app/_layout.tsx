@@ -3,7 +3,7 @@ import { DarkTheme, DefaultTheme, router, Stack, ThemeProvider } from 'expo-rout
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, useColorScheme } from 'react-native';
+import { Platform, StyleSheet, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { getDatabase } from '@/db/database';
@@ -12,6 +12,7 @@ import i18n, { applyLanguage } from '@/i18n';
 import { reminderData } from '@/services/notification-responses';
 import { setupNotificationCategories } from '@/services/notifications';
 import { replan } from '@/services/planning';
+import { useColors } from '@/theme/use-colors';
 
 void SplashScreen.preventAutoHideAsync();
 
@@ -76,6 +77,7 @@ function useNotificationNavigation() {
 
 function AppStack() {
   const { t } = useTranslation();
+  const colors = useColors();
   useNotificationNavigation();
   return (
     <Stack>
@@ -88,7 +90,21 @@ function AppStack() {
       <Stack.Screen name="contact/[id]/last-contact" options={SHEET} />
       <Stack.Screen name="contact/[id]/edit" options={{ presentation: 'modal' }} />
       <Stack.Screen name="review" options={{ presentation: 'fullScreenModal', headerShown: false }} />
-      <Stack.Screen name="settings" options={{ title: t('common.settings') }} />
+      <Stack.Screen
+        name="settings/index"
+        options={{
+          // Le grand titre « Réglages » est affiché par l'écran lui-même (comme l'accueil).
+          title: '',
+          headerBackTitle: t('settings.back'),
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Platform.OS === 'ios' ? colors.groupedBackground : colors.background },
+        }}
+      />
+      <Stack.Screen name="settings/reminder-time" options={SHEET} />
+      <Stack.Screen name="settings/max-per-day" options={SHEET} />
+      <Stack.Screen name="settings/pause" options={SHEET} />
+      <Stack.Screen name="settings/review" options={{ ...SHEET, sheetAllowedDetents: [0.9] }} />
+      <Stack.Screen name="settings/language" options={SHEET} />
     </Stack>
   );
 }

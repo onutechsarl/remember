@@ -193,7 +193,7 @@ function ContactDetails({ data, onChanged }: { data: ContactData; onChanged: () 
         <Group>
           <GroupRow
             label={t('contact.frequency')}
-            leading={<IconBadge icon={Repeat} color={colors.accent} />}
+            leading={<IconBadge icon={Repeat} />}
             trailing={
               <>
                 <RowValue>{t(`frequency.${contact.frequencyDays}`)}</RowValue>
@@ -205,7 +205,7 @@ function ContactDetails({ data, onChanged }: { data: ContactData; onChanged: () 
           {phone && (
             <GroupRow
               label={t('contact.channel')}
-              leading={<ChannelIcon channel={contact.preferredChannel} size={32} round={!ios} />}
+              leading={<ChannelIcon channel={contact.preferredChannel} />}
               trailing={
                 <>
                   <RowValue>{t(`channel.${contact.preferredChannel}`)}</RowValue>
@@ -217,7 +217,7 @@ function ContactDetails({ data, onChanged }: { data: ContactData; onChanged: () 
           )}
           <GroupRow
             label={t('contact.lastContact')}
-            leading={<IconBadge icon={History} color="#8E8E93" />}
+            leading={<IconBadge icon={History} />}
             trailing={
               <>
                 <RowValue>{`${t('home.daysAgo', { count: days })} · ${t('contact.correct')}`}</RowValue>
@@ -228,7 +228,7 @@ function ContactDetails({ data, onChanged }: { data: ContactData; onChanged: () 
           />
           <GroupRow
             label={t('contact.nextReminder')}
-            leading={<IconBadge icon={Bell} color={colors.amber} />}
+            leading={<IconBadge icon={Bell} />}
             trailing={<RowValue>{nextReminder}</RowValue>}
             last
           />
@@ -291,21 +291,19 @@ function Notice({ text }: { text: string }) {
 
 function HistoryRow({ item, last, language }: { item: Interaction; last: boolean; language: string }) {
   const { t } = useTranslation();
-  const colors = useColors();
 
   let label: string;
   let leading: React.ReactNode;
   if (item.channel === 'call') {
     label = t('contact.called');
-    leading = <ChannelIcon channel="call" size={32} round={Platform.OS === 'android'} />;
+    leading = <ChannelIcon channel="call" />;
   } else if (item.channel) {
     label = t('contact.wroteOn', { channel: t(`channel.${item.channel}`) });
-    leading = <ChannelIcon channel={item.channel} size={32} round={Platform.OS === 'android'} />;
+    leading = <ChannelIcon channel={item.channel} />;
   } else {
     label = t(`contact.source.${item.source}`);
     const icon = item.source === 'weekly_review' ? CalendarCheck : item.source === 'initial_estimate' ? Clock : Check;
-    const color = item.source === 'weekly_review' ? '#8B5CF6' : item.source === 'initial_estimate' ? '#8E8E93' : colors.accent;
-    leading = <IconBadge icon={icon} color={color} />;
+    leading = <IconBadge icon={icon} />;
   }
 
   return (

@@ -1,11 +1,12 @@
 /**
- * Choix d'un jour, au plus tard `max` (correction du dernier échange, US-07 CA2).
+ * Choix d'un jour entre `min` et `max` (correction du dernier échange, US-07 CA2 ; pause, US-15 CA4).
  * Implémentations natives : day-picker.ios.tsx (SwiftUI) et day-picker.android.tsx (Material 3).
  * Ce fichier ne sert qu'aux plateformes non prises en charge (web).
  */
 export type DayPickerProps = {
   value: Date;
-  max: Date;
+  min?: Date;
+  max?: Date;
   /** Jour choisi, en date locale (minuit). */
   onChange: (day: Date) => void;
 };

@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { ChannelIcon } from '@/components/channel-icon';
 import { Group, GroupRow, RowValue } from '@/components/form';
@@ -33,7 +33,7 @@ export default function ChannelSheet() {
             <View key={channel} style={!installed && styles.disabled}>
               <GroupRow
                 label={t(`channel.${channel}`)}
-                leading={<ChannelIcon channel={channel} size={32} round={Platform.OS === 'android'} />}
+                leading={<ChannelIcon channel={channel} />}
                 accessibilityRole="radio"
                 selected={channel === current}
                 last={i === CHANNELS.length - 1}

@@ -186,5 +186,56 @@
       "invalidPhone": "This number isn't valid. Add the country code, for example +237.",
       "duplicate": "This number is already used by another contact."
     }
+  },
+  "settings": {
+    "back": "Home",
+    "reminders": "Reminders",
+    "reminderTime": "Reminder time",
+    "reminderTimeHint": "Local time: 6:00 PM stays 6:00 PM when you change time zones.",
+    "maxPerDay": "Reminders per day",
+    "maxValue": "{{count}} max",
+    "maxHint": "The most overdue people come first; the others are reminded on the following days.",
+    "pause": "Pause",
+    "pauseOff": "Off",
+    "pausedUntil": "Until {{date}}",
+    "pauseHint": "No reminders or check-ins during the pause, while on holiday for example.",
+    "pauseNone": "Don't pause",
+    "pauseResume": "Resume reminders now",
+    "pauseWeek": "1 week",
+    "pauseTwoWeeks": "2 weeks",
+    "pauseMonth": "1 month",
+    "pauseDate": "Until a date…",
+    "pauseSave": "Pause",
+    "review": "Weekly check-in",
+    "reviewDayTime": "Day and time",
+    "reviewDay": "Day",
+    "reviewTime": "Time",
+    "language": "Language",
+    "languageSystem": "Phone language",
+    "languageHint": "The change applies right away, including to reminders already scheduled.",
+    "data": "Data",
+    "export": "Export my data",
+    "import": "Import data",
+    "privacy": "Your data stays on your phone: no account, no server.",
+    "version": "Remember {{version}}",
+    "dev": "Development",
+    "testReminder": "Send a test reminder (in 30 s)",
+    "testScheduled": "Test reminder scheduled in 30 seconds. You can close the app.",
+    "testNoContact": "Add a contact first.",
+    "exportError": "The export couldn't be created.",
+    "importConfirm": {
+      "title": "Replace your data?",
+      "body": "Your current contacts, history and settings will be replaced by the file's ({{count}} contacts).",
+      "confirm": "Replace"
+    },
+    "importDone_one": "{{count}} contact imported.",
+    "importDone_other": "{{count}} contacts imported.",
+    "importInvalid": "This file isn't a Remember export.",
+    "importVersion": "This file comes from a newer version of Remember. Please update the app.",
+    "importError": "The import failed. Your data wasn't changed."
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English"
   }
 }

@@ -1,34 +1,25 @@
-import { MessageCircle, MessageSquare, MessageSquareText, Phone, Send, type LucideIcon } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { MessageCircle, MessageSquare, MessageSquareText, Phone, PhoneCall, Send, type LucideIcon } from 'lucide-react-native';
 
 import type { Channel } from '@/domain/types';
 
-/** Icône et couleur de chaque messagerie (maquettes, planche des composants). */
-const CHANNEL_STYLE: Record<Channel, { icon: LucideIcon; color: string }> = {
-  whatsapp: { icon: MessageCircle, color: '#25D366' },
-  telegram: { icon: Send, color: '#2AABEE' },
-  signal: { icon: MessageSquare, color: '#3A76F0' },
-  viber: { icon: Phone, color: '#7360F2' },
-  sms: { icon: MessageSquareText, color: '#34C759' },
-  call: { icon: Phone, color: '#34C759' },
+import { IconBadge } from './form';
+
+/** Pictogramme de chaque messagerie ; la pastille est la même que pour toutes les icônes de l'app. */
+const CHANNEL_GLYPH: Record<Channel, LucideIcon> = {
+  whatsapp: MessageCircle,
+  telegram: Send,
+  signal: MessageSquare,
+  viber: PhoneCall,
+  sms: MessageSquareText,
+  call: Phone,
 };
 
 /** Pictogramme seul d'une messagerie (bouton « Écrire » de la fiche). */
 export function channelGlyph(channel: Channel): LucideIcon {
-  return CHANNEL_STYLE[channel].icon;
+  return CHANNEL_GLYPH[channel];
 }
 
-/** Icône blanche dans un carré (iOS) ou un cercle (Android) à la couleur de la messagerie. */
-export function ChannelIcon({ channel, size = 36, round = false }: { channel: Channel; size?: number; round?: boolean }) {
-  const { icon: Icon, color } = CHANNEL_STYLE[channel];
-  return (
-    <View
-      style={[styles.box, { width: size, height: size, borderRadius: round ? size / 2 : size * 0.24, backgroundColor: color }]}>
-      <Icon color="#FFFFFF" size={size * 0.56} strokeWidth={2.2} />
-    </View>
-  );
+/** Icône de messagerie en tête de ligne. */
+export function ChannelIcon({ channel, size = 32 }: { channel: Channel; size?: number }) {
+  return <IconBadge icon={CHANNEL_GLYPH[channel]} size={size} />;
 }
-
-const styles = StyleSheet.create({
-  box: { alignItems: 'center', justifyContent: 'center' },
-});

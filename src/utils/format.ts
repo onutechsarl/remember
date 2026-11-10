@@ -29,3 +29,10 @@ export function formatUpcoming(
   const day = new Intl.DateTimeFormat(language, { weekday: 'short', day: 'numeric', month: 'short' }).format(date);
   return `${day}, ${time}`;
 }
+
+/** Jour de la semaine 1 = lundi … 7 = dimanche → « dim. » / « Sun » (court) ou « dimanche » (long). */
+export function formatWeekday(isoWeekday: number, language: string, width: 'short' | 'long' = 'short'): string {
+  // Le 4 janvier 2026 est un dimanche : 4 + n tombe sur le n-ième jour ISO.
+  const text = new Intl.DateTimeFormat(language, { weekday: width }).format(new Date(2026, 0, 4 + isoWeekday));
+  return text.charAt(0).toLocaleUpperCase(language) + text.slice(1);
+}

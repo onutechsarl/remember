@@ -1,5 +1,8 @@
+import * as Notifications from 'expo-notifications';
+
 import {
   getSettings,
+  insertReminder,
   listActiveContacts,
   recordInteraction,
   replaceFutureReminders,
@@ -12,7 +15,7 @@ import i18n from '@/i18n';
 
 import { availableChannels, effectiveChannel } from './messaging';
 import { notificationContent } from './notification-content';
-import { scheduleNotifications } from './notifications';
+import { ANDROID_CHANNEL_ID, scheduleNotifications } from './notifications';
 
 /**
  * Replanifie les 7 prochains jours (architecture.pdf, « Fonctionnement des rappels ») :
@@ -50,4 +53,26 @@ export async function noteInteraction(db: Db, input: Omit<RecordInteractionInput
   const contact = await recordInteraction(db, { ...input, occurredAt: now }, now);
   await replan(db, now);
   return contact;
+}
+
+/**
+ * Développement : un rappel réel pour le premier contact, dans 30 secondes, avec ses boutons.
+ * Sert à tester les actions app fermée (risque R1). Renvoie `false` s'il n'y a aucun contact.
+ */
+export async function scheduleTestReminder(db: Db): Promise<boolean> {
+  const [contact] = await listActiveContacts(db);
+  if (!contact) return false;
+  const now = new Date();
+  const reminder = await insertReminder(db, { contactId: contact.id, kind: 'reminder', fireAt: new Date(now.getTime() + 30_000) }, now);
+  const channels = await availableChannels().catch(() => null);
+  const content = notificationContent(reminder, [contact], i18n.t.bind(i18n), (c) =>
+    channels ? effectiveChannel(c.preferredChannel, channels) : c.preferredChannel,
+  );
+  if (!content) return false;
+  await Notifications.scheduleNotificationAsync({
+    identifier: reminder.id,
+    content: { ...content, sound: 'default' },
+    trigger: { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds: 30, channelId: ANDROID_CHANNEL_ID },
+  });
+  return true;
 }

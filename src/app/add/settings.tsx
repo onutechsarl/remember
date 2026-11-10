@@ -156,7 +156,7 @@ export default function ContactSetupScreen() {
             <Group>
               <GroupRow
                 label={t(`channel.${setup.preferredChannel}`)}
-                leading={<ChannelIcon channel={setup.preferredChannel} round={!ios} />}
+                leading={<ChannelIcon channel={setup.preferredChannel} />}
                 trailing={
                   ios ? <ChevronRight color={colors.textSecondary} size={20} /> : <ChevronDown color={colors.text} size={22} />
                 }

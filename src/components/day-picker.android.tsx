@@ -10,7 +10,7 @@ const fromUtcDay = (date: Date) => new Date(date.getUTCFullYear(), date.getUTCMo
 const toUtcDay = (date: Date) => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 
 /** Calendrier Material 3. */
-export function DayPicker({ value, max, onChange }: DayPickerProps) {
+export function DayPicker({ value, min, max, onChange }: DayPickerProps) {
   const colors = useColors();
   return (
     <Host matchContents={{ vertical: true }} style={styles.host}>
@@ -19,7 +19,7 @@ export function DayPicker({ value, max, onChange }: DayPickerProps) {
         variant="picker"
         displayedComponents="date"
         showVariantToggle={false}
-        selectableDates={{ end: toUtcDay(max) }}
+        selectableDates={{ start: min && toUtcDay(min), end: max && toUtcDay(max) }}
         color={colors.accent}
         onDateSelected={(date) => onChange(fromUtcDay(date))}
       />

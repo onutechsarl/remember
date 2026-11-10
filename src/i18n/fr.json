@@ -186,5 +186,56 @@
       "invalidPhone": "Ce numéro n'est pas valide. Ajoutez l'indicatif du pays, par exemple +237.",
       "duplicate": "Ce numéro est déjà suivi pour un autre contact."
     }
+  },
+  "settings": {
+    "back": "Accueil",
+    "reminders": "Rappels",
+    "reminderTime": "Heure des rappels",
+    "reminderTimeHint": "Heure locale : 18:00 reste 18:00 quand vous changez de fuseau horaire.",
+    "maxPerDay": "Rappels par jour",
+    "maxValue": "{{count}} maximum",
+    "maxHint": "Les proches les plus urgents passent en premier ; les autres sont rappelés les jours suivants.",
+    "pause": "Mettre en pause",
+    "pauseOff": "Non",
+    "pausedUntil": "Jusqu'au {{date}}",
+    "pauseHint": "Aucun rappel ni bilan pendant la pause, pendant les vacances par exemple.",
+    "pauseNone": "Ne pas mettre en pause",
+    "pauseResume": "Reprendre les rappels maintenant",
+    "pauseWeek": "1 semaine",
+    "pauseTwoWeeks": "2 semaines",
+    "pauseMonth": "1 mois",
+    "pauseDate": "Jusqu'à une date…",
+    "pauseSave": "Mettre en pause",
+    "review": "Bilan hebdomadaire",
+    "reviewDayTime": "Jour et heure",
+    "reviewDay": "Jour",
+    "reviewTime": "Heure",
+    "language": "Langue",
+    "languageSystem": "Langue du téléphone",
+    "languageHint": "Le changement s'applique tout de suite, y compris aux rappels déjà programmés.",
+    "data": "Données",
+    "export": "Exporter mes données",
+    "import": "Importer des données",
+    "privacy": "Vos données restent sur votre téléphone : aucun compte, aucun serveur.",
+    "version": "Remember {{version}}",
+    "dev": "Développement",
+    "testReminder": "Envoyer un rappel de test (dans 30 s)",
+    "testScheduled": "Rappel de test programmé dans 30 secondes. Vous pouvez fermer l'application.",
+    "testNoContact": "Ajoutez d'abord un contact.",
+    "exportError": "L'export n'a pas pu être créé.",
+    "importConfirm": {
+      "title": "Remplacer vos données ?",
+      "body": "Les contacts, l'historique et les réglages actuels seront remplacés par ceux du fichier ({{count}} contacts).",
+      "confirm": "Remplacer"
+    },
+    "importDone_one": "{{count}} contact importé.",
+    "importDone_other": "{{count}} contacts importés.",
+    "importInvalid": "Ce fichier n'est pas un export de Remember.",
+    "importVersion": "Ce fichier vient d'une version plus récente de Remember. Mettez l'application à jour.",
+    "importError": "L'import a échoué. Vos données n'ont pas été modifiées."
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English"
   }
 }

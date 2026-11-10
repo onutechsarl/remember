@@ -4,6 +4,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import { initialLastContactAt, type LastContactAnswer } from '@/domain/initial-estimate';
 import { applyInteraction, correctLastContact, snoozeContact } from '@/domain/interactions';
 import type { PlannedReminder } from '@/domain/reminder-planner';
+import type { ExportFile } from '@/domain/backup';
 import { addDays } from '@/domain/dates';
 import type { Channel, FrequencyDays, Interaction, InteractionSource, Settings, TrackedContact } from '@/domain/types';
 
@@ -324,4 +325,67 @@ export async function nextReminderFor(db: Db, contactId: string, now: Date): Pro
     [contactId, toIso(now)],
   );
   return row ? new Date(row.fire_at) : null;
+}
+
+/** Ajoute un rappel isolé (rappel de test en développement), sans toucher à la planification. */
+export async function insertReminder(
+  db: Db,
+  reminder: Pick<ScheduledReminder, 'contactId' | 'kind' | 'fireAt'>,
+  now: Date,
+): Promise<ScheduledReminder> {
+  const created: ScheduledReminder = { id: randomUUID(), ...reminder, action: null, createdAt: now };
+  await db.runAsync(
+    'INSERT INTO scheduled_reminder (id, contact_id, kind, fire_at, action, created_at) VALUES (?, ?, ?, ?, NULL, ?)',
+    [created.id, created.contactId, created.kind, toIso(created.fireAt), toIso(now)],
+  );
+  return created;
+}
+
+// ─── Import ──────────────────────────────────────────────────────────────────
+
+/**
+ * Remplace toutes les données par celles d'un fichier d'export (US-16 CA2), en une transaction :
+ * en cas d'erreur, rien n'est modifié.
+ * @param deviceIdByPhone identifiants du répertoire du téléphone, par numéro E.164 (US-16 CA3).
+ */
+export async function replaceAllData(
+  db: Db,
+  file: ExportFile,
+  deviceIdByPhone: ReadonlyMap<string, string>,
+  now: Date,
+): Promise<number> {
+  await db.withTransactionAsync(async () => {
+    await db.execAsync('DELETE FROM scheduled_reminder; DELETE FROM interaction; DELETE FROM tracked_contact;');
+    await updateSettings(db, { ...file.settings, pausedUntil: null, lastWeeklyReviewAt: null });
+
+    for (const c of file.contacts) {
+      const interactions = [...c.interactions].sort((a, b) => a.occurredAt.localeCompare(b.occurredAt));
+      const latest = interactions.at(-1);
+      const lastContactAt = new Date(c.lastContactAt);
+      const contact: TrackedContact = {
+        id: randomUUID(),
+        deviceContactId: c.phoneE164 ? (deviceIdByPhone.get(c.phoneE164) ?? null) : null,
+        displayName: c.displayName,
+        phoneE164: c.phoneE164,
+        frequencyDays: c.frequencyDays,
+        preferredChannel: c.preferredChannel,
+        lastContactAt,
+        lastContactSource:
+          latest && new Date(latest.occurredAt).getTime() === lastContactAt.getTime() ? latest.source : 'manual_edit',
+        snoozedUntil: null,
+        lastRemindedAt: null,
+        createdAt: now,
+        updatedAt: now,
+        archivedAt: null,
+      };
+      await db.runAsync(
+        `INSERT INTO tracked_contact (${CONTACT_COLUMNS}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        contactToParams(contact),
+      );
+      for (const i of interactions) {
+        await insertInteraction(db, contact.id, new Date(i.occurredAt), i.source, i.channel, now);
+      }
+    }
+  });
+  return file.contacts.length;
 }
