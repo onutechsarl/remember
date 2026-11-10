@@ -9,6 +9,7 @@
  */
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
+import { Platform } from 'react-native';
 
 import { handleReminderAction } from '@/services/notification-responses';
 
@@ -23,14 +24,18 @@ Notifications.setNotificationHandler({
   }),
 });
 
-TaskManager.defineTask<Notifications.NotificationTaskPayload>(NOTIFICATION_TASK, async ({ data, error }) => {
-  if (error || !data || !('actionIdentifier' in data)) return;
-  await handleReminderAction(data);
-});
+// Android seulement : sur iOS, `registerTaskAsync` sert aux notifications push en arrière-plan
+// (mode `remote-notification`), que Remember n'utilise pas ; les boutons y passent par l'écouteur.
+if (Platform.OS === 'android') {
+  TaskManager.defineTask<Notifications.NotificationTaskPayload>(NOTIFICATION_TASK, async ({ data, error }) => {
+    if (error || !data || !('actionIdentifier' in data)) return;
+    await handleReminderAction(data);
+  });
 
-Notifications.registerTaskAsync(NOTIFICATION_TASK).catch((error: unknown) =>
-  console.error('Notifications : tâche non enregistrée', error),
-);
+  Notifications.registerTaskAsync(NOTIFICATION_TASK).catch((error: unknown) =>
+    console.error('Notifications : tâche non enregistrée', error),
+  );
+}
 
 Notifications.addNotificationResponseReceivedListener((response) => {
   void handleReminderAction(response);

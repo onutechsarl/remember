@@ -55,7 +55,7 @@ export default function EditContactScreen() {
   const background = Platform.OS === 'ios' ? colors.groupedBackground : colors.background;
   const headerButton = (label: string, onPress: () => void, bold = false) => (
     <Pressable onPress={onPress} disabled={saving} hitSlop={10} accessibilityRole="button">
-      <Text style={[Type.body, { color: colors.accentText, fontWeight: bold ? '600' : '400' }]}>{label}</Text>
+      <Text style={[Type.body, styles.headerText, { color: colors.accentText, fontWeight: bold ? '600' : '400' }]}>{label}</Text>
     </Pressable>
   );
 
@@ -112,6 +112,8 @@ function Field({
 
 const styles = StyleSheet.create({
   content: { padding: 20 },
+  // Marges dans la capsule de verre qu'iOS 26 dessine autour des boutons de la barre.
+  headerText: { paddingHorizontal: Platform.OS === 'ios' ? 12 : 0 },
   hint: { paddingHorizontal: 16, paddingTop: 8, fontWeight: '400' },
   field: { flexDirection: 'row', alignItems: 'center', minHeight: 52, marginLeft: 16, paddingRight: 16 },
   fieldLabel: { width: 90 },

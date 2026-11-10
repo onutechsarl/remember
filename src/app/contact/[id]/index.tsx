@@ -48,7 +48,7 @@ export default function ContactScreen() {
       accessibilityRole="button"
       accessibilityLabel={t('contact.edit')}>
       {Platform.OS === 'ios' ? (
-        <Text style={[Type.body, { color: colors.accentText }]}>{t('contact.edit')}</Text>
+        <Text style={[Type.body, styles.headerText, { color: colors.accentText }]}>{t('contact.edit')}</Text>
       ) : (
         <Pencil color={colors.text} size={22} />
       )}
@@ -314,6 +314,8 @@ function HistoryRow({ item, last, language }: { item: Interaction; last: boolean
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
+  // Marges dans la capsule de verre qu'iOS 26 dessine autour des boutons de la barre.
+  headerText: { paddingHorizontal: 12 },
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
   content: { paddingHorizontal: 20 },
   identity: { alignItems: 'center', gap: 6, paddingTop: 4, paddingBottom: 20 },
