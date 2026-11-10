@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS settings (
   weekly_review_time TEXT NOT NULL DEFAULT '18:00',
   paused_until TEXT,
   onboarding_completed INTEGER NOT NULL DEFAULT 0,
+  last_weekly_review_at TEXT,
   schema_version INTEGER NOT NULL DEFAULT 1
 );
 INSERT OR IGNORE INTO settings (id) VALUES (1);

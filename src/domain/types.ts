@@ -53,6 +53,8 @@ export type Settings = {
   weeklyReviewTime: string; // HH:MM
   pausedUntil: Date | null;
   onboardingCompleted: boolean;
+  /** Fin du dernier bilan hebdomadaire : le bouton du bilan disparaît ensuite (US-14 CA7). */
+  lastWeeklyReviewAt: Date | null;
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -66,4 +68,5 @@ export const DEFAULT_SETTINGS: Settings = {
   weeklyReviewTime: '18:00',
   pausedUntil: null,
   onboardingCompleted: false,
+  lastWeeklyReviewAt: null,
 };

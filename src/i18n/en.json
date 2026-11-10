@@ -2,10 +2,42 @@
   "app": {
     "name": "Remember"
   },
+  "common": {
+    "settings": "Settings",
+    "add": "Add",
+    "loadError": "Couldn't load your data.",
+    "retry": "Try again"
+  },
+  "frequency": {
+    "7": "Every week",
+    "14": "Every 2 weeks",
+    "30": "Every month",
+    "60": "Every 2 months",
+    "90": "Every 3 months"
+  },
   "home": {
     "title": "Remember",
     "due": "Reach out",
-    "ok": "All good"
+    "ok": "All good",
+    "daysAgo_one": "{{count}}d",
+    "daysAgo_other": "{{count}}d",
+    "daysAgoA11y_one": "last contact noted {{count}} day ago",
+    "daysAgoA11y_other": "last contact noted {{count}} days ago",
+    "late": "Overdue",
+    "markDone": "I checked in",
+    "showSection": "Show",
+    "hideSection": "Hide",
+    "empty": {
+      "title": "No one to follow yet",
+      "body": "Add the people you want to keep in mind. We'll remind you to check in.",
+      "action": "Add contacts"
+    },
+    "notificationsOff": {
+      "title": "Reminders are off",
+      "body": "Turn on notifications in Settings."
+    },
+    "reviewButton_one": "Weekly check-in, {{count}} person to review",
+    "reviewButton_other": "Weekly check-in, {{count}} people to review"
   },
   "reminder": {
     "body": "Time to check in with {{name}}.",

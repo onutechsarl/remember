@@ -4,7 +4,7 @@ import { buildWidgetSnapshot } from '@/widget/snapshot';
 
 import { applyInteraction, correctLastContact, snoozeContact } from '../interactions';
 import { DEFAULT_SETTINGS } from '../types';
-import { MAX_REVIEW_CARDS, reviewCandidates, reviewSummary } from '../weekly-review';
+import { isReviewAvailable, lastScheduledReviewAt, MAX_REVIEW_CARDS, reviewCandidates, reviewSummary } from '../weekly-review';
 import { day, makeContact, makeInteraction, NOW } from '../__fixtures__';
 
 describe('applyInteraction', () => {
@@ -64,6 +64,26 @@ describe('bilan hebdomadaire', () => {
       ['b', 'not_yet' as const],
     ]);
     expect(reviewSummary(reviewed, answers, NOW)).toEqual({ upToDate: 2, toContact: 1 });
+  });
+});
+
+describe('bouton du bilan', () => {
+  // Bilan prévu le dimanche à 18:00 ; NOW = lundi 19 octobre, donc le dernier bilan prévu est le dimanche 18 à 18:00.
+  it('trouve le dernier moment prévu pour le bilan', () => {
+    expect(lastScheduledReviewAt(DEFAULT_SETTINGS, NOW)).toEqual(day(-1, 18));
+    expect(lastScheduledReviewAt(DEFAULT_SETTINGS, day(6, 18))).toEqual(day(6, 18));
+    expect(lastScheduledReviewAt(DEFAULT_SETTINGS, day(6, 17))).toEqual(day(-1, 18));
+  });
+
+  it('s’affiche tant que le bilan prévu n’a pas été fait', () => {
+    expect(isReviewAvailable(DEFAULT_SETTINGS, 3, NOW)).toBe(true);
+    expect(isReviewAvailable({ ...DEFAULT_SETTINGS, lastWeeklyReviewAt: day(-1, 20) }, 3, NOW)).toBe(false);
+    expect(isReviewAvailable({ ...DEFAULT_SETTINGS, lastWeeklyReviewAt: day(-1, 20) }, 3, day(6, 18))).toBe(true);
+  });
+
+  it('ne s’affiche pas sans proche à passer en revue ni si le bilan est désactivé', () => {
+    expect(isReviewAvailable(DEFAULT_SETTINGS, 0, NOW)).toBe(false);
+    expect(isReviewAvailable({ ...DEFAULT_SETTINGS, weeklyReviewEnabled: false }, 3, NOW)).toBe(false);
   });
 });
 

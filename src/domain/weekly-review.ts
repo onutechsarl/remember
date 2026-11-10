@@ -1,5 +1,5 @@
-import { daysBetween } from './dates';
-import type { TrackedContact } from './types';
+import { addDays, atLocalTime, daysBetween, isoWeekday, startOfLocalDay } from './dates';
+import type { Settings, TrackedContact } from './types';
 import { sortByUrgency, urgency } from './urgency';
 
 /** Nombre maximum de cartes par bilan (US-14 CA6). */
@@ -14,6 +14,26 @@ export function reviewCandidates<T extends TrackedContact>(contacts: T[], today:
     (c) => c.archivedAt === null && daysBetween(c.lastContactAt, today) >= REVIEW_MIN_DAYS,
   );
   return sortByUrgency(candidates, today).slice(0, MAX_REVIEW_CARDS);
+}
+
+/** Dernier moment prévu pour le bilan (jour et heure des réglages) avant `now`. */
+export function lastScheduledReviewAt(settings: Pick<Settings, 'weeklyReviewWeekday' | 'weeklyReviewTime'>, now: Date): Date {
+  const daysSince = (isoWeekday(now) - settings.weeklyReviewWeekday + 7) % 7;
+  const moment = atLocalTime(addDays(startOfLocalDay(now), -daysSince), settings.weeklyReviewTime);
+  return moment > now ? atLocalTime(addDays(moment, -7), settings.weeklyReviewTime) : moment;
+}
+
+/**
+ * Le bouton du bilan est-il affiché sur l'accueil ? (US-14 CA7) Oui à partir du moment prévu
+ * pour le bilan, tant qu'il n'a pas été fait et qu'il reste des proches à passer en revue.
+ */
+export function isReviewAvailable(
+  settings: Pick<Settings, 'weeklyReviewEnabled' | 'weeklyReviewWeekday' | 'weeklyReviewTime' | 'lastWeeklyReviewAt'>,
+  candidateCount: number,
+  now: Date,
+): boolean {
+  if (!settings.weeklyReviewEnabled || candidateCount === 0) return false;
+  return settings.lastWeeklyReviewAt === null || settings.lastWeeklyReviewAt < lastScheduledReviewAt(settings, now);
 }
 
 export type ReviewAnswer = 'talked' | 'not_yet';

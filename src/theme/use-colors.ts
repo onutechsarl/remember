@@ -1,8 +1,8 @@
 import { useColorScheme } from 'react-native';
 
-import { Colors } from './colors';
+import { Colors, type Palette } from './colors';
 
 /** Renvoie la palette du thème actif (clair ou sombre). */
-export function useColors() {
+export function useColors(): Palette {
   return useColorScheme() === 'dark' ? Colors.dark : Colors.light;
 }

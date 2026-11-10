@@ -46,6 +46,7 @@ export type SettingsRow = {
   weekly_review_time: string;
   paused_until: string | null;
   onboarding_completed: number;
+  last_weekly_review_at: string | null;
 };
 
 export type ReminderAction = 'message' | 'done' | 'snooze';
@@ -133,6 +134,7 @@ export function settingsFromRow(row: SettingsRow): Settings {
     weeklyReviewTime: row.weekly_review_time,
     pausedUntil: toDateOrNull(row.paused_until),
     onboardingCompleted: row.onboarding_completed === 1,
+    lastWeeklyReviewAt: toDateOrNull(row.last_weekly_review_at),
   };
 }
 
@@ -148,6 +150,7 @@ export const SETTINGS_COLUMNS: { [K in keyof Settings]: [column: string, toSql: 
   weeklyReviewTime: ['weekly_review_time', (v) => v],
   pausedUntil: ['paused_until', toIsoOrNull],
   onboardingCompleted: ['onboarding_completed', (v) => (v ? 1 : 0)],
+  lastWeeklyReviewAt: ['last_weekly_review_at', toIsoOrNull],
 };
 
 export function reminderFromRow(row: ScheduledReminderRow): ScheduledReminder {

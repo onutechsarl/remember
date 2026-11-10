@@ -1,7 +1,15 @@
+import * as Notifications from 'expo-notifications';
+
 /**
  * ReminderScheduler — programmation des notifications locales et catégories d'actions.
- * Bibliothèque prévue : expo-notifications (à installer avec `npx expo install`).
+ * La programmation elle-même arrive au lot 4 ; ce module expose pour l'instant l'état de l'autorisation.
  */
-export async function scheduleReminders(): Promise<never> {
-  throw new Error('scheduleReminders : non implémenté');
+
+export type NotificationPermission = 'granted' | 'denied' | 'undetermined';
+
+/** État de l'autorisation, sans la demander (US-03 CA2 : bandeau « Rappels désactivés »). */
+export async function getNotificationPermission(): Promise<NotificationPermission> {
+  const { granted, status } = await Notifications.getPermissionsAsync();
+  if (granted) return 'granted';
+  return status === 'denied' ? 'denied' : 'undetermined';
 }

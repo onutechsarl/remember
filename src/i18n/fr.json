@@ -2,10 +2,42 @@
   "app": {
     "name": "Remember"
   },
+  "common": {
+    "settings": "Réglages",
+    "add": "Ajouter",
+    "loadError": "Impossible de charger vos données.",
+    "retry": "Réessayer"
+  },
+  "frequency": {
+    "7": "Chaque semaine",
+    "14": "Toutes les 2 semaines",
+    "30": "Chaque mois",
+    "60": "Tous les 2 mois",
+    "90": "Tous les 3 mois"
+  },
   "home": {
     "title": "Remember",
     "due": "À recontacter",
-    "ok": "Tout va bien"
+    "ok": "Tout va bien",
+    "daysAgo_one": "{{count}} j",
+    "daysAgo_other": "{{count}} j",
+    "daysAgoA11y_one": "dernier échange noté il y a {{count}} jour",
+    "daysAgoA11y_other": "dernier échange noté il y a {{count}} jours",
+    "late": "En retard",
+    "markDone": "J'ai pris des nouvelles",
+    "showSection": "Afficher",
+    "hideSection": "Masquer",
+    "empty": {
+      "title": "Personne à suivre",
+      "body": "Ajoutez les proches à qui vous voulez penser. On s'occupe de vous le rappeler.",
+      "action": "Ajouter des contacts"
+    },
+    "notificationsOff": {
+      "title": "Rappels désactivés",
+      "body": "Activez les notifications dans Réglages."
+    },
+    "reviewButton_one": "Bilan de la semaine, {{count}} proche à passer en revue",
+    "reviewButton_other": "Bilan de la semaine, {{count}} proches à passer en revue"
   },
   "reminder": {
     "body": "Pensez à prendre des nouvelles de {{name}}.",
